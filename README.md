@@ -4,16 +4,6 @@
   <img src="https://github.com/qusaykali1/q/main/img/s.png" alt=" Guide">
 </p>
 
-A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali**. This tool provides deep data extraction for IP addresses, system hardware, phone numbers, and social media accounts across **40+ global platforms** with strict verification.
-
-### 🚀 Key Features:
-1. **IP Tracker:** 20+ detailed points (ISP, Location, Coordinates).
-2. **Device Audit:** 30+ parameters (RAM, CPU, Battery, OS).
-3. **Phone Intelligence:** International scanning (30+ info fields).
-4. **Username Linker:** Scans **40 global platforms** with real-time verification.
-
----
-
 أداة استخبارات رقمية (**OSINT**) احترافية وقوية من تطوير **Qusay_kali**. تتيح الأداة استخراج بيانات عميقة لعنوان الأيبي، فحص عتاد الأجهزة، تحليل أرقام الهواتف، والبحث عن الحسابات في أكثر من **40 منصة عالمية**.
 
 ### 🚀 المميزات الرئيسية:
@@ -30,7 +20,7 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 ```bash
 pkg update && pkg upgrade -y
 pkg install python git clang python-dev -y
-git clone [https://github.com/qusaykali1/q.git](https://github.com/qusaykali1/q.git)
+git clone https://github.com/qusaykali1/q.git
 cd q
 pip install -r requirements.txt
 python tracker.py
@@ -38,7 +28,7 @@ python tracker.py
 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ```
 sudo apt update && sudo apt install python3 python3-pip git -y
-git clone [https://github.com/qusaykali1/q.git](https://github.com/qusaykali1/q.git)
+git clone https://github.com/qusaykali1/q.git
 cd q
 pip3 install -r requirements.txt
 python3 tracker.py
