@@ -1,4 +1,4 @@
-# 🛡️ Qusay_kali Deep OSINT Tool (v1)
+# 🛡️ Qusay_kali Tool (v1)
 
 <p align="center">
   <img src="https://github.com/qusaykali1/q/main/img/s.png" alt=" Guide">
