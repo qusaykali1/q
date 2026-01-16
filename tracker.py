@@ -1,3 +1,4 @@
+
 # CODE BY Qusay_kali
 # Free Palestine 🇵🇸
 
@@ -169,7 +170,7 @@ def device_info():
 
 def phone_osint():
     sub_banner("PHONE OSINT")
-    num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}").strip()
+    num=input(f"{Wh}[+] Phone (+962xxxxxx): {Gr}").strip()
     
     if not num.startswith('+'): num = '+' + num
     
