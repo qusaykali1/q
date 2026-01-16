@@ -37,11 +37,12 @@ cd q
 
 pip install -r requirements.txt
 
-python qusay.py
-🐉 2. Kali Linux / Ubuntu | كالي لينكس
-للتشغيل على توزيعات لينكس:
+python tracker.py
+### 🐉 2. Kali Linux / Ubuntu | كالي لينكس
+## 🛠️ Installation & Execution | التحميل والتشغيل
 
-Bash
+
+
 
 sudo apt update && sudo apt install python3 python3-pip git -y
 
