@@ -1,5 +1,4 @@
-requests
-phonenumbers
-psutil
-phonenumbers
-geopy
+requests==2.31.0
+psutil==5.9.8
+geopy==2.4.1
+phonenumbers==8.13.26
