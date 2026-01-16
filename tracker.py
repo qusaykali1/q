@@ -1,11 +1,8 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
 # CODE BY Qusay_kali
 # Free Palestine 🇵🇸
 
 import os, socket, platform, sys, time, requests, locale, datetime, json, re, uuid
 
-# محاولة استيراد المكتبات الخارجية
 try:
     import psutil
 except:
@@ -19,13 +16,11 @@ except:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# ===== COLORS =====
 Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
 Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
 HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
 
-# ===== BASIC FUNCTIONS =====
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
@@ -66,7 +61,6 @@ def get_mac():
     except:
         return "Unknown"
 
-# ================= 1. IP TRACKING =================
 def IP_Track():
     sub_banner("IP TRACKING")
     ip=input(f"{Wh}[+] Target IP : {Gr}").strip()
@@ -92,7 +86,6 @@ def IP_Track():
 
     print(f"{Re}[!] All IP services failed")
 
-# ================= 2. DEVICE INFO (COMPLETE) =================
 def device_info():
     sub_banner("DEVICE AUDIT (COMPLETE)")
     host=socket.gethostname()
@@ -163,7 +156,6 @@ def device_info():
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ================= 3. PHONE OSINT =================
 def phone_osint():
     sub_banner("PHONE OSINT")
     num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
@@ -180,7 +172,6 @@ def phone_osint():
     region_name=geocoder.description_for_number(p,"en")
     tz=timezone.time_zones_for_number(p)
     
-    # تحديد نوع الخط
     ntype = phonenumbers.number_type(p)
     line_type = "Unknown"
     if ntype == 1: line_type = "Mobile"
@@ -249,7 +240,6 @@ def username_osint():
                 print(f"{Re}[NONE ]{Wh} {name}")
         except: pass
 
-# ================= MAIN =================
 def main():
     while True:
         banner()
