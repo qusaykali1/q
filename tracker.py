@@ -38,14 +38,14 @@ def banner():
 ╚██████╔╝╚██████╔╝███████║██║  ██║   ██║       ██║  ██╗██║  ██╗███████╗██║
  ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝{Ye} Qusay_kali
 {Wh}-----------------------------------------------------------------------------
-{Gr}  {Ye}Instagram : @qusay_kali | {FREE_PAL} | {Ye}youtube  : @Qusay_kali
+{Gr}  {Ye}Instagram : @qusay_kali | {Cy}palestin | {Ye}youtube  : @Qusay_kali
 {Wh}-----------------------------------------------------------------------------""")
 
 def sub_banner(title):
     clear()
     print(f"""
 {Re}                .                         .
-{Re}                //                         \\\\
+{Re}                //               ps         \\\\
 {Re}               ||      {Wh} .--------------. {Re}      ||
 {Re}               ||    {Wh}.-'                '-. {Re}   ||
 {Re}               ||  {Wh}/    {Re}████      ████    {Wh}\\ {Re} ||
@@ -271,4 +271,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
 
