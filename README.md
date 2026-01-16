@@ -29,41 +29,21 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 
 ### 📱 1. Termux (Android) | تريمكس
 ```bash
-pkg update && pkg upgrade -y
-pkg install python git clang python-dev -y
-
-git clone https://github.com/qusaykali1/q.git
-cd q
-
-pip install -r requirements.txt
-python tracker.py
+1.pkg update && pkg upgrade -y
+2.pkg install python git clang python-dev -y
+3.git clone https://github.com/qusaykali1/q.git
+4.cd q
+5.pip install -r requirements.txt
+6.python tracker.py
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ## 🛠️ Installation & Execution | التحميل والتشغيل
-
-sudo apt update && sudo apt install python3 python3-pip git -y
-git clone https://github.com/qusaykali1/q.git
-cd q
-pip3 install -r requirements.txt
-
-python3 tracker.py
-💻 3. Windows | ويندوز
-Install Python 3.x.
-
-Open CMD and type:
-
-DOS
-
-git clone https://github.com/qusaykali1/q.git
-cd q
-pip install -r requirements.txt
-python tracker.py
-
-requests
-
-phonenumbers
-
-psutil
-
+```bash
+1.sudo apt update && sudo apt install python3 python3-pip git -y
+2.git clone https://github.com/qusaykali1/q.git
+3.cd q
+4.pip3 install -r requirements.txt
+5.python3 tracker.py
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 👨‍💻 Author | المطور
 Qusay_kali
