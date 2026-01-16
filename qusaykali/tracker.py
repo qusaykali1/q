@@ -4,6 +4,8 @@
 # Free Palestine 🇵🇸
 
 import os, socket, platform, sys, time, requests, locale, datetime, json, re, uuid
+
+# محاولة استيراد المكتبات الخارجية
 try:
     import psutil
 except:
@@ -23,7 +25,7 @@ Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
 HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
 
-# ===== BASIC =====
+# ===== BASIC FUNCTIONS =====
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
@@ -57,7 +59,6 @@ def sub_banner(title):
 {Wh}         |____________________________________|
 """)
 
-# وظيفة لجلب الماك أدريس
 def get_mac():
     try:
         mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
@@ -65,7 +66,7 @@ def get_mac():
     except:
         return "Unknown"
 
-# ================= IP TRACK =================
+# ================= 1. IP TRACKING =================
 def IP_Track():
     sub_banner("IP TRACKING")
     ip=input(f"{Wh}[+] Target IP : {Gr}").strip()
@@ -91,12 +92,11 @@ def IP_Track():
 
     print(f"{Re}[!] All IP services failed")
 
-# ================= DEVICE INFO (COMPLETE) =================
+# ================= 2. DEVICE INFO (COMPLETE) =================
 def device_info():
     sub_banner("DEVICE AUDIT (COMPLETE)")
     host=socket.gethostname()
 
-    # --- جلب معلومات الموقع الدقيق والماك أدريس ---
     address_full = "N/A"
     try:
         geo_r = requests.get("https://ipwho.is/", timeout=10).json()
@@ -108,7 +108,6 @@ def device_info():
             country = geo_r.get("country")
             maps_link = f"https://www.google.com/maps?q={lat},{lon}"
             
-            # استخدام Geopy للعنوان الدقيق
             if Nominatim:
                 try:
                     geolocator = Nominatim(user_agent="Qusay_kali_Audit")
@@ -129,7 +128,7 @@ def device_info():
 
     info=[
         ("Hostname", host),
-        ("MAC Address", mac_addr), # طلبك الأساسي
+        ("MAC Address", mac_addr), 
         ("Public IP", pub_ip),
         ("Local IP", socket.gethostbyname(host)),
         ("Country", country),
@@ -164,34 +163,56 @@ def device_info():
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ================= PHONE OSINT =================
+# ================= 3. PHONE OSINT =================
 def phone_osint():
     sub_banner("PHONE OSINT")
     num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
 
     try:
         p=phonenumbers.parse(num,None)
+        if not phonenumbers.is_valid_number(p):
+            print(f"{Re}[!] Invalid Phone Number")
+            return
     except:
-        print(f"{Re}Invalid Number"); return
+        print(f"{Re}[!] Parsing Error"); return
 
     carrier_name=carrier.name_for_number(p,"en")
-    result={
-        "Country":geocoder.country_name_for_number(p,"en"),
-        "City / Area":geocoder.description_for_number(p,"en"),
-        "Carrier":carrier_name or "Unknown",
-        "Valid":phonenumbers.is_valid_number(p),
-        "Timezone":list(timezone.time_zones_for_number(p)),
-        "International":phonenumbers.format_number(p,phonenumbers.PhoneNumberFormat.INTERNATIONAL),
-    }
+    region_name=geocoder.description_for_number(p,"en")
+    tz=timezone.time_zones_for_number(p)
+    
+    # تحديد نوع الخط
+    ntype = phonenumbers.number_type(p)
+    line_type = "Unknown"
+    if ntype == 1: line_type = "Mobile"
+    elif ntype == 0: line_type = "Fixed Line"
+    elif ntype == 2: line_type = "Fixed Line or Mobile"
+    elif ntype == 3: line_type = "Toll Free"
+    elif ntype == 4: line_type = "Premium Rate"
+    elif ntype == 5: line_type = "Shared Cost"
+    elif ntype == 6: line_type = "VoIP"
 
-    print(f"\n{Wh}====== PHONE ANALYSIS ======\n")
-    for i,(k,v) in enumerate(result.items(),1):
+    result=[
+        ("Country", geocoder.country_name_for_number(p, "en")),
+        ("Region/City", region_name),
+        ("Carrier", carrier_name if carrier_name else "Unknown"),
+        ("Line Type", line_type),
+        ("Timezone", list(tz)),
+        ("Valid Number", phonenumbers.is_valid_number(p)),
+        ("Possible", phonenumbers.is_possible_number(p)),
+        ("E164 Format", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.E164)),
+        ("International", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.INTERNATIONAL)),
+        ("National", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.NATIONAL)),
+        ("RFC3966", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.RFC3966))
+    ]
+
+    print(f"\n{Wh}====== ADVANCED PHONE ANALYSIS ======\n")
+    for i,(k,v) in enumerate(result,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ================= USERNAME OSINT =================
 def username_osint():
     sub_banner("USERNAME OSINT")
     user=input(f"{Wh}[+] Username : {Gr}").strip()
+    
     platforms=[
         ("Facebook","https://facebook.com/{}"),
         ("Instagram","https://instagram.com/{}"),
@@ -201,10 +222,24 @@ def username_osint():
         ("Telegram","https://t.me/{}"),
         ("Snapchat","https://snapchat.com/add/{}"),
         ("Reddit","https://reddit.com/user/{}"),
-        ("YouTube","https://youtube.com/@{}")
+        ("YouTube","https://youtube.com/@{}"),
+        ("Pinterest","https://pinterest.com/{}"),
+        ("LinkedIn","https://linkedin.com/in/{}"),
+        ("Twitch","https://twitch.tv/{}"),
+        ("Medium","https://medium.com/@{}"),
+        ("Behance","https://behance.net/{}"),
+        ("Dribbble","https://dribbble.com/{}"),
+        ("Vimeo","https://vimeo.com/{}"),
+        ("SoundCloud","https://soundcloud.com/{}"),
+        ("DeviantArt","https://deviantart.com/{}"),
+        ("VK","https://vk.com/{}"),
+        ("About.me","https://about.me/{}"),
+        ("Steam","https://steamcommunity.com/id/{}"),
+        ("Spotify","https://open.spotify.com/user/{}"),
+        ("Pinterest","https://www.pinterest.com/{}")
     ]
 
-    print(f"\n{Wh}[*] Searching for {Ye}{user}...\n")
+    print(f"\n{Wh}[*] Searching for {Ye}{user} on {len(platforms)} platforms...\n")
     for name,url in platforms:
         try:
             r=requests.get(url.format(user),headers=HEADERS,timeout=5)
@@ -219,11 +254,11 @@ def main():
     while True:
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
-        print(f"{Wh}[2]{Gr} Device Information (Precise Loc + MAC)")
-        print(f"{Wh}[3]{Gr} Phone OSINT")
-        print(f"{Wh}[4]{Gr} Username OSINT")
+        print(f"{Wh}[2]{Gr} Device Information ")
+        print(f"{Wh}[3]{Gr} Phone Number ")
+        print(f"{Wh}[4]{Gr} Username ")
         print(f"{Wh}[0]{Gr} Exit")
-        ch=input(f"{Wh}[+] Select : ")
+        ch=input(f"\n{Wh}[+] Select : ")
         if ch=="1": IP_Track()
         elif ch=="2": device_info()
         elif ch=="3": phone_osint()
