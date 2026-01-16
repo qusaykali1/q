@@ -35,7 +35,7 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 4.cd q
 5.pip install -r requirements.txt
 6.python tracker.py
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ```
 ### 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ## 🛠️ Installation & Execution |
@@ -47,6 +47,3 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 3.cd q
 4.pip3 install -r requirements.txt
 5.python3 tracker.py
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-👨‍💻 Author | المطور
-Qusay_kali
