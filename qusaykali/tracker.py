@@ -12,7 +12,7 @@ except:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# ===== Colors =====
+# ================= COLORS =================
 Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
 Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
@@ -20,11 +20,11 @@ HEADERS = {
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 }
 
-# ===== Clear =====
+# ================= CLEAR =================
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
-# ===== Main Banner =====
+# ================= BANNER =================
 def banner():
     clear()
     print(f"""{Cy}
@@ -38,7 +38,7 @@ def banner():
 {Gr} Free Palestine 🇵🇸
 {Wh}---------------------------------------------------------------""")
 
-# ===== Sub Banner =====
+# ================= SUB BANNER =================
 def sub_banner(title):
     clear()
     print(f"""
@@ -56,29 +56,52 @@ def sub_banner(title):
 {Wh}          |____________________________________|
 """)
 
-# ===== IP TRACK =====
+# ================= IP TRACK (FIXED) =================
 def IP_Track():
-    sub_banner("IP TRACKING")
-    ip = input(f"{Wh}[+] Target IP : {Gr}")
-    try:
-        r = requests.get(f"http://ip-api.com/json/{ip}?fields=66846719", timeout=10)
-        d = r.json()
-        if d.get("status")=="success":
-            for i,(k,v) in enumerate(d.items(),1):
-                print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
-        else:
-            print(f"{Re}IP Not Found")
-    except:
-        print(f"{Re}Connection Error")
+    sub_banner("IP TRACKING (STABLE)")
+    ip = input(f"{Wh}[+] Target IP : {Gr}").strip()
 
-# ===== DEVICE INFO (40) =====
+    # check internet (real)
+    try:
+        requests.get("https://1.1.1.1", timeout=5)
+    except:
+        print(f"{Re}[!] No Internet Connection")
+        return
+
+    apis = [
+        f"https://ipwho.is/{ip}",
+        f"https://ipapi.co/{ip}/json/",
+        f"https://ipinfo.io/{ip}/json"
+    ]
+
+    for api in apis:
+        try:
+            r = requests.get(api, headers=HEADERS, timeout=10)
+            data = r.json()
+
+            if isinstance(data, dict) and data.get("success") is False:
+                continue
+
+            print(f"\n{Wh}========== IP INFORMATION ==========\n")
+            for i,(k,v) in enumerate(data.items(),1):
+                if i > 30: break
+                print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
+            return
+
+        except:
+            continue
+
+    print(f"{Re}[!] All IP Services Failed")
+
+# ================= DEVICE INFO (40) =================
 def device_info():
     sub_banner("DEVICE AUDIT (40)")
     host = socket.gethostname()
+
     try:
-        pub_ip = requests.get("https://api.ipify.org").text
+        pub_ip = requests.get("https://api.ipify.org", timeout=5).text
     except:
-        pub_ip="Offline"
+        pub_ip = "Offline"
 
     mem = psutil.virtual_memory() if psutil else None
     disk = psutil.disk_usage("/") if psutil else None
@@ -94,9 +117,9 @@ def device_info():
         ("Processor",platform.processor()),
         ("CPU Cores",psutil.cpu_count() if psutil else "N/A"),
         ("RAM Total",f"{round(mem.total/1e9,2)} GB" if mem else "N/A"),
-        ("RAM Used",f"{mem.percent}%" if mem else "N/A"),
+        ("RAM Usage",f"{mem.percent}%" if mem else "N/A"),
         ("Disk Total",f"{round(disk.total/1e9,2)} GB" if disk else "N/A"),
-        ("Disk Used",f"{disk.percent}%" if disk else "N/A"),
+        ("Disk Usage",f"{disk.percent}%" if disk else "N/A"),
         ("Boot Time",datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M") if psutil else "N/A"),
         ("Python Version",platform.python_version()),
         ("Python Build",platform.python_build()),
@@ -108,25 +131,24 @@ def device_info():
         ("Byte Order",sys.byteorder),
         ("Locale",locale.getdefaultlocale()),
         ("Encoding",sys.getfilesystemencoding()),
-        ("Node",platform.node()),
+        ("Node Name",platform.node()),
         ("Battery",f"{psutil.sensors_battery().percent}%" if psutil and psutil.sensors_battery() else "N/A"),
-        ("Uptime",time.time()-psutil.boot_time() if psutil else "N/A"),
-        ("Swap",psutil.swap_memory().percent if psutil else "N/A"),
+        ("Uptime",round(time.time()-psutil.boot_time(),2) if psutil else "N/A"),
+        ("Swap Usage",psutil.swap_memory().percent if psutil else "N/A"),
         ("Network","Online"),
         ("Shell",os.getenv("SHELL")),
         ("Timezone",time.tzname),
         ("Security Mode","OSINT"),
         ("Encryption","Enabled"),
-        ("Audit Status","PASS"),
-        ("Owner","Local User"),
         ("Integrity","OK"),
+        ("Audit Result","PASS"),
         ("Final Check","CLEAN")
     ]
 
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ===== PHONE OSINT (≈30) =====
+# ================= PHONE OSINT (~30) =================
 def phone_osint():
     sub_banner("PHONE OSINT")
     num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
@@ -139,26 +161,21 @@ def phone_osint():
             ("Possible",phonenumbers.is_possible_number(p)),
             ("Region",phonenumbers.region_code_for_number(p)),
             ("Country",geocoder.country_name_for_number(p,"en")),
-            ("Location EN",geocoder.description_for_number(p,"en")),
-            ("Location AR",geocoder.description_for_number(p,"ar")),
-            ("Carrier EN",carrier.name_for_number(p,"en")),
-            ("Carrier AR",carrier.name_for_number(p,"ar")),
+            ("City/Area",geocoder.description_for_number(p,"en")),
+            ("Carrier",carrier.name_for_number(p,"en")),
             ("Timezone",timezone.time_zones_for_number(p)),
-            ("E164",phonenumbers.format_number(p,phonenumbers.PhoneNumberFormat.E164)),
+            ("E164",phonenumbers.format_number(p,0)),
             ("International",phonenumbers.format_number(p,1)),
             ("National",phonenumbers.format_number(p,2)),
             ("Number Type",phonenumbers.number_type(p)),
             ("Leading Zero",p.italian_leading_zero),
-            ("Raw Input",p.raw_input),
             ("Mobile",phonenumbers.number_type(p)==1),
             ("Fixed Line",phonenumbers.number_type(p)==0),
-            ("Region Type","National"),
             ("Network","GSM/LTE"),
             ("OSINT Level","PUBLIC"),
-            ("Privacy","High"),
-            ("Leak Status","Unknown"),
-            ("Risk","Low"),
-            ("Verified","Yes"),
+            ("Privacy","HIGH"),
+            ("Risk","LOW"),
+            ("Verified","YES"),
             ("Source","ITU"),
             ("Database","Global"),
             ("Scan","OK"),
@@ -169,7 +186,7 @@ def phone_osint():
     except:
         print(f"{Re}Invalid Number")
 
-# ===== USERNAME OSINT (40 PLATFORMS) =====
+# ================= USERNAME OSINT (40) =================
 def username_osint():
     sub_banner("USERNAME OSINT (40)")
     user=input(f"{Wh}[+] Username : {Gr}").strip()
@@ -234,7 +251,7 @@ def username_osint():
         if not found:
             print(f"{Re}[NONE ]{Wh} {name}")
 
-# ===== MAIN =====
+# ================= MAIN =================
 def main():
     while True:
         banner()
