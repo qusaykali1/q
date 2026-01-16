@@ -3,22 +3,27 @@
 # CODE BY Qusay_kali
 # Free Palestine 🇵🇸
 
-import os, socket, platform, sys, time, requests, locale, datetime
+import os, socket, platform, sys, time, requests, locale, datetime, json, re, uuid
 try:
     import psutil
 except:
     psutil = None
 
+try:
+    from geopy.geocoders import Nominatim
+except:
+    Nominatim = None
+
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
+# ===== COLORS =====
 Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
 Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
-HEADERS = {
-    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-}
+HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
 
+# ===== BASIC =====
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
@@ -47,22 +52,25 @@ def sub_banner(title):
 {Re}                \\\\  {Wh}'-.      {Ye}WWWW      {Wh}.-' {Re}  //
 {Re}                 '                         '
 {Wh}          ____________________________________
-{Wh}          | {Cy}ACTION : {Gr}{title:<22}{Wh}|
-{Wh}          | {Cy}AUTHOR : {Wh}Qusay_kali           {Wh}|
-{Wh}          |____________________________________|
+{Wh}         | {Cy}ACTION : {Gr}{title:<22}{Wh}   |
+{Wh}         | {Cy}AUTHOR : {Wh}Qusay_kali        |  {Wh}|
+{Wh}         |____________________________________|
 """)
 
-def IP_Track():
-    sub_banner("IP TRACKING (STABLE)")
-    ip = input(f"{Wh}[+] Target IP : {Gr}").strip()
-
+# وظيفة لجلب الماك أدريس
+def get_mac():
     try:
-        requests.get("https://1.1.1.1", timeout=5)
+        mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+        return mac.upper()
     except:
-        print(f"{Re}[!] No Internet Connection")
-        return
+        return "Unknown"
 
-    apis = [
+# ================= IP TRACK =================
+def IP_Track():
+    sub_banner("IP TRACKING")
+    ip=input(f"{Wh}[+] Target IP : {Gr}").strip()
+
+    apis=[
         f"https://ipwho.is/{ip}",
         f"https://ipapi.co/{ip}/json/",
         f"https://ipinfo.io/{ip}/json"
@@ -70,123 +78,120 @@ def IP_Track():
 
     for api in apis:
         try:
-            r = requests.get(api, headers=HEADERS, timeout=10)
-            data = r.json()
-
-            if isinstance(data, dict) and data.get("success") is False:
+            r=requests.get(api,headers=HEADERS,timeout=8).json()
+            if isinstance(r,dict) and r.get("success") is False:
                 continue
-
             print(f"\n{Wh}========== IP INFORMATION ==========\n")
-            for i,(k,v) in enumerate(data.items(),1):
-                if i > 30: break
+            for i,(k,v) in enumerate(r.items(),1):
+                if i>30: break
                 print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
             return
-
         except:
-            continue
+            pass
 
-    print(f"{Re}[!] All IP Services Failed")
+    print(f"{Re}[!] All IP services failed")
 
+# ================= DEVICE INFO (COMPLETE) =================
 def device_info():
-    sub_banner("DEVICE AUDIT (40)")
-    host = socket.gethostname()
+    sub_banner("DEVICE AUDIT (COMPLETE)")
+    host=socket.gethostname()
 
+    # --- جلب معلومات الموقع الدقيق والماك أدريس ---
+    address_full = "N/A"
     try:
-        pub_ip = requests.get("https://api.ipify.org", timeout=5).text
+        geo_r = requests.get("https://ipwho.is/", timeout=10).json()
+        if geo_r.get("success"):
+            pub_ip = geo_r.get("ip")
+            lat = geo_r.get("latitude")
+            lon = geo_r.get("longitude")
+            city = geo_r.get("city")
+            country = geo_r.get("country")
+            maps_link = f"https://www.google.com/maps?q={lat},{lon}"
+            
+            # استخدام Geopy للعنوان الدقيق
+            if Nominatim:
+                try:
+                    geolocator = Nominatim(user_agent="Qusay_kali_Audit")
+                    location = geolocator.reverse(f"{lat}, {lon}")
+                    address_full = location.address if location else "Not Found"
+                except:
+                    address_full = "Geopy Service Timeout"
+        else:
+            pub_ip = requests.get("https://api.ipify.org", timeout=5).text
+            lat = lon = city = country = maps_link = "N/A"
     except:
         pub_ip = "Offline"
+        lat = lon = city = country = maps_link = "Error"
 
-    mem = psutil.virtual_memory() if psutil else None
-    disk = psutil.disk_usage("/") if psutil else None
+    mem=psutil.virtual_memory() if psutil else None
+    disk=psutil.disk_usage("/") if psutil else None
+    mac_addr = get_mac()
 
-    info = [
-        ("Hostname",host),
-        ("Public IP",pub_ip),
-        ("Local IP",socket.gethostbyname(host)),
-        ("OS",platform.system()),
-        ("OS Release",platform.release()),
-        ("OS Version",platform.version()),
-        ("Architecture",platform.machine()),
-        ("Processor",platform.processor()),
-        ("CPU Cores",psutil.cpu_count() if psutil else "N/A"),
-        ("RAM Total",f"{round(mem.total/1e9,2)} GB" if mem else "N/A"),
-        ("RAM Usage",f"{mem.percent}%" if mem else "N/A"),
-        ("Disk Total",f"{round(disk.total/1e9,2)} GB" if disk else "N/A"),
-        ("Disk Usage",f"{disk.percent}%" if disk else "N/A"),
-        ("Boot Time",datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M") if psutil else "N/A"),
-        ("Python Version",platform.python_version()),
-        ("Python Build",platform.python_build()),
-        ("Python Compiler",platform.python_compiler()),
-        ("Executable",sys.executable),
-        ("User",os.getenv("USERNAME") or os.getenv("USER")),
-        ("Working Dir",os.getcwd()),
-        ("Platform",sys.platform),
-        ("Byte Order",sys.byteorder),
-        ("Locale",locale.getdefaultlocale()),
-        ("Encoding",sys.getfilesystemencoding()),
-        ("Node Name",platform.node()),
-        ("Battery",f"{psutil.sensors_battery().percent}%" if psutil and psutil.sensors_battery() else "N/A"),
-        ("Uptime",round(time.time()-psutil.boot_time(),2) if psutil else "N/A"),
-        ("Swap Usage",psutil.swap_memory().percent if psutil else "N/A"),
-        ("Network","Online"),
-        ("Shell",os.getenv("SHELL")),
-        ("Timezone",time.tzname),
-        ("Security Mode","OSINT"),
-        ("Encryption","Enabled"),
-        ("Integrity","OK"),
-        ("Audit Result","PASS"),
-        ("Final Check","CLEAN")
+    info=[
+        ("Hostname", host),
+        ("MAC Address", mac_addr), # طلبك الأساسي
+        ("Public IP", pub_ip),
+        ("Local IP", socket.gethostbyname(host)),
+        ("Country", country),
+        ("City", city),
+        ("Latitude", lat),
+        ("Longitude", lon),
+        ("Full Address", address_full),
+        ("Maps Link", maps_link),
+        ("OS", platform.system()),
+        ("OS Release", platform.release()),
+        ("OS Version", platform.version()),
+        ("Architecture", platform.machine()),
+        ("Processor", platform.processor()),
+        ("CPU Cores", psutil.cpu_count() if psutil else "N/A"),
+        ("RAM Total", f"{round(mem.total/1e9,2)} GB" if mem else "N/A"),
+        ("RAM Usage", f"{mem.percent}%" if mem else "N/A"),
+        ("Disk Total", f"{round(disk.total/1e9,2)} GB" if disk else "N/A"),
+        ("Disk Usage", f"{disk.percent}%" if disk else "N/A"),
+        ("Boot Time", datetime.datetime.fromtimestamp(psutil.boot_time()) if psutil else "N/A"),
+        ("Python Version", platform.python_version()),
+        ("User", os.getenv("USER") or os.getenv("USERNAME")),
+        ("Working Dir", os.getcwd()),
+        ("Timezone", time.tzname),
+        ("Battery", f"{psutil.sensors_battery().percent}%" if psutil and psutil.sensors_battery() else "N/A"),
+        ("Uptime", f"{round((time.time()-psutil.boot_time())/3600, 2)} Hours" if psutil else "N/A"),
+        ("Network Status", "Online" if pub_ip != "Offline" else "Offline"),
+        ("Security Mode", "OSINT"),
+        ("Final Check", "CLEAN")
     ]
 
+    print(f"\n{Wh}========== DEVICE & LOCATION INFO ==========\n")
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
+# ================= PHONE OSINT =================
 def phone_osint():
     sub_banner("PHONE OSINT")
-    num=input(f"{Wh}[+] Phone (+962xxx): {Gr}")
+    num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
+
     try:
         p=phonenumbers.parse(num,None)
-        data=[
-            ("Country Code",p.country_code),
-            ("National Number",p.national_number),
-            ("Valid",phonenumbers.is_valid_number(p)),
-            ("Possible",phonenumbers.is_possible_number(p)),
-            ("Region",phonenumbers.region_code_for_number(p)),
-            ("Country",geocoder.country_name_for_number(p,"en")),
-            ("City/Area",geocoder.description_for_number(p,"en")),
-            ("Carrier",carrier.name_for_number(p,"en")),
-            ("Timezone",timezone.time_zones_for_number(p)),
-            ("E164",phonenumbers.format_number(p,0)),
-            ("International",phonenumbers.format_number(p,1)),
-            ("National",phonenumbers.format_number(p,2)),
-            ("Number Type",phonenumbers.number_type(p)),
-            ("Leading Zero",p.italian_leading_zero),
-            ("Mobile",phonenumbers.number_type(p)==1),
-            ("Fixed Line",phonenumbers.number_type(p)==0),
-            ("Network","GSM/LTE"),
-            ("OSINT Level","PUBLIC"),
-            ("Privacy","HIGH"),
-            ("Risk","LOW"),
-            ("Verified","YES"),
-            ("Source","ITU"),
-            ("Database","Global"),
-            ("Scan","OK"),
-            ("Result","SUCCESS")
-        ]
-        for i,(k,v) in enumerate(data,1):
-            print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
     except:
-        print(f"{Re}Invalid Number")
+        print(f"{Re}Invalid Number"); return
 
+    carrier_name=carrier.name_for_number(p,"en")
+    result={
+        "Country":geocoder.country_name_for_number(p,"en"),
+        "City / Area":geocoder.description_for_number(p,"en"),
+        "Carrier":carrier_name or "Unknown",
+        "Valid":phonenumbers.is_valid_number(p),
+        "Timezone":list(timezone.time_zones_for_number(p)),
+        "International":phonenumbers.format_number(p,phonenumbers.PhoneNumberFormat.INTERNATIONAL),
+    }
+
+    print(f"\n{Wh}====== PHONE ANALYSIS ======\n")
+    for i,(k,v) in enumerate(result.items(),1):
+        print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
+
+# ================= USERNAME OSINT =================
 def username_osint():
-    sub_banner("USERNAME OSINT (40)")
+    sub_banner("USERNAME OSINT")
     user=input(f"{Wh}[+] Username : {Gr}").strip()
-
-    variations=set([user,user.lower(),user.upper(),user.capitalize()])
-    for i in range(10):
-        variations.add(f"{user}{i}")
-        variations.add(f"{i}{user}")
-
     platforms=[
         ("Facebook","https://facebook.com/{}"),
         ("Instagram","https://instagram.com/{}"),
@@ -196,59 +201,27 @@ def username_osint():
         ("Telegram","https://t.me/{}"),
         ("Snapchat","https://snapchat.com/add/{}"),
         ("Reddit","https://reddit.com/user/{}"),
-        ("LinkedIn","https://linkedin.com/in/{}"),
-        ("YouTube","https://youtube.com/@{}"),
-        ("Pinterest","https://pinterest.com/{}"),
-        ("Twitch","https://twitch.tv/{}"),
-        ("Spotify","https://open.spotify.com/user/{}"),
-        ("Medium","https://medium.com/@{}"),
-        ("Behance","https://behance.net/{}"),
-        ("Dribbble","https://dribbble.com/{}"),
-        ("VK","https://vk.com/{}"),
-        ("OK","https://ok.ru/{}"),
-        ("Flickr","https://flickr.com/people/{}"),
-        ("SoundCloud","https://soundcloud.com/{}"),
-        ("DeviantArt","https://deviantart.com/{}"),
-        ("Quora","https://quora.com/profile/{}"),
-        ("Patreon","https://patreon.com/{}"),
-        ("Imgur","https://imgur.com/user/{}"),
-        ("Steam","https://steamcommunity.com/id/{}"),
-        ("Roblox","https://roblox.com/user.aspx?username={}"),
-        ("Bitbucket","https://bitbucket.org/{}"),
-        ("About.me","https://about.me/{}"),
-        ("Vimeo","https://vimeo.com/{}"),
-        ("Dailymotion","https://dailymotion.com/{}"),
-        ("LastFM","https://last.fm/user/{}"),
-        ("Mixcloud","https://mixcloud.com/{}"),
-        ("Issuu","https://issuu.com/{}"),
-        ("Keybase","https://keybase.io/{}"),
-        ("Wattpad","https://wattpad.com/user/{}"),
-        ("ReverbNation","https://reverbnation.com/{}"),
-        ("Etsy","https://etsy.com/shop/{}"),
-        ("Xbox","https://xboxgamertag.com/search/{}"),
-        ("GitLab","https://gitlab.com/{}")
+        ("YouTube","https://youtube.com/@{}")
     ]
 
+    print(f"\n{Wh}[*] Searching for {Ye}{user}...\n")
     for name,url in platforms:
-        found=False
-        for v in variations:
-            try:
-                r=requests.get(url.format(v),headers=HEADERS,timeout=5)
-                if r.status_code==200 and v.lower() in r.text.lower():
-                    print(f"{Gr}[FOUND]{Wh} {name:<12} -> {url.format(v)}")
-                    found=True; break
-            except:
-                pass
-        if not found:
-            print(f"{Re}[NONE ]{Wh} {name}")
+        try:
+            r=requests.get(url.format(user),headers=HEADERS,timeout=5)
+            if r.status_code==200:
+                print(f"{Gr}[FOUND]{Wh} {name:<15} -> {url.format(user)}")
+            else:
+                print(f"{Re}[NONE ]{Wh} {name}")
+        except: pass
 
+# ================= MAIN =================
 def main():
     while True:
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
-        print(f"{Wh}[2]{Gr} Device Information ")
+        print(f"{Wh}[2]{Gr} Device Information (Precise Loc + MAC)")
         print(f"{Wh}[3]{Gr} Phone OSINT")
-        print(f"{Wh}[4]{Gr} Username OSINT (")
+        print(f"{Wh}[4]{Gr} Username OSINT")
         print(f"{Wh}[0]{Gr} Exit")
         ch=input(f"{Wh}[+] Select : ")
         if ch=="1": IP_Track()
@@ -256,7 +229,7 @@ def main():
         elif ch=="3": phone_osint()
         elif ch=="4": username_osint()
         elif ch=="0": sys.exit()
-        input(f"\n{Wh}Press Enter...")
+        input(f"{Wh}\nPress Enter to return...")
 
 if __name__=="__main__":
     main()
