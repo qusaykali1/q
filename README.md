@@ -36,16 +36,12 @@ git clone https://github.com/qusaykali1/q.git
 cd q
 
 pip install -r requirements.txt
-
 python tracker.py
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ## 🛠️ Installation & Execution | التحميل والتشغيل
 
-
-
-
 sudo apt update && sudo apt install python3 python3-pip git -y
-
 git clone https://github.com/qusaykali1/q.git
 cd q
 pip3 install -r requirements.txt
