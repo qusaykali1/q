@@ -1,223 +1,182 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+# OSINT TOOL – FINAL COMPLETE BUILD
+# Author : Qusay_kali
+# FREE PALESTINE 🇵🇸
 
-# ==============================
-#   OSINT TOOL – FINAL EDITION
-#   Fixed & Hardened Version
-# ==============================
-
-import os
-import sys
-import socket
-import platform
-import time
-import locale
-import datetime
-import requests
-
-try:
-    import psutil
-except ImportError:
-    psutil = None
-
+import os, sys, requests
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# ==============================
-# COLORS
-# ==============================
-Bl = '\033[30m'
+# ================= COLORS =================
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
 Ye = '\033[1;33m'
-Blu = '\033[1;34m'
-Mage = '\033[1;35m'
 Cy = '\033[1;36m'
 Wh = '\033[1;37m'
 
-# ==============================
-# HEADERS (ANTI-BLOCK)
-# ==============================
 HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/120.0.0.0 Safari/537.36"
-    ),
-    "Accept": "application/json",
-    "Connection": "close"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 }
 
-# ==============================
+# ================= UI =================
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-# ==============================
 def banner():
     clear()
     print(f"""{Cy}
- ██████╗ ██╗   ██╗███████╗ █████╗ ██╗   ██╗
-██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝
-██║   ██║██║   ██║███████╗███████║ ╚████╔╝ 
-██║▄▄ ██║██║   ██║╚════██║██╔══██║  ╚██╔╝  
-╚██████╔╝╚██████╔╝███████║██║  ██║   ██║   
- ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   
-{Wh}-----------------------------------------
-{Ye} OSINT MULTI TOOL – FINAL STABLE BUILD
-{Ye} Mode : LEGAL | PUBLIC DATA ONLY
-{Wh}-----------------------------------------
+ ██████╗ ███████╗██╗███╗   ██╗████████╗
+██╔════╝ ██╔════╝██║████╗  ██║╚══██╔══╝
+██║  ███╗█████╗  ██║██╔██╗ ██║   ██║   
+██║   ██║██╔══╝  ██║██║╚██╗██║   ██║   
+╚██████╔╝███████╗██║██║ ╚████║   ██║   
+ ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝   ╚═╝   
+
+{Gr}FREE PALESTINE 🇵🇸
+{Wh}OSINT MULTI TOOL – FINAL
 """)
 
-# ==============================
 def sub_banner(title):
-    clear()
-    print(f"{Cy}========== {Gr}{title} {Cy}=========={Wh}")
+    print(f"\n{Cy}========== {Gr}{title} {Cy}=========={Wh}\n")
 
-# ==============================
-def valid_public_ip(ip):
-    private_prefixes = (
-        "10.", "127.", "192.168.",
-        "172.16.", "172.17.", "172.18.", "172.19.",
-        "172.2", "169.254."
-    )
-    return not ip.startswith(private_prefixes)
+# =====================================================
+# (1) USERNAME OSINT – 40 PLATFORMS – REAL CHECK
+# =====================================================
+def TrackLu():
+    sub_banner("USERNAME OSINT (40 PLATFORMS)")
+    user = input(f"{Wh}[+] Username : {Gr}").strip()
 
-# ==============================
-def IP_Track():
-    sub_banner("IP TRACKING")
-    ip = input(f"\n{Wh}[+] Enter Target IP : {Gr}").strip()
+    variations = set()
+    variations.update([
+        user, user.lower(), user.upper(), user.capitalize()
+    ])
 
-    if not valid_public_ip(ip):
-        print(f"{Re}[!] Private or Local IP – Not Traceable")
-        return
+    for i in range(10):
+        variations.add(f"{i}{user}")
+        variations.add(f"{user}{i}")
+        variations.add(f"{i}{user.lower()}")
+        variations.add(f"{user.lower()}{i}")
 
-    print(f"\n{Wh}========== IP INFORMATION =========={Gr}")
-
-    apis = [
-        f"https://ipwho.is/{ip}",
-        f"https://ipinfo.io/{ip}/json",
-        f"https://ipapi.co/{ip}/json/"
+    platforms = [
+        ("Facebook", "https://www.facebook.com/{}"),
+        ("Instagram", "https://www.instagram.com/{}"),
+        ("Twitter/X", "https://twitter.com/{}"),
+        ("TikTok", "https://www.tiktok.com/@{}"),
+        ("GitHub", "https://github.com/{}"),
+        ("Telegram", "https://t.me/{}"),
+        ("Snapchat", "https://www.snapchat.com/add/{}"),
+        ("Reddit", "https://www.reddit.com/user/{}"),
+        ("LinkedIn", "https://www.linkedin.com/in/{}"),
+        ("YouTube", "https://www.youtube.com/@{}"),
+        ("Pinterest", "https://www.pinterest.com/{}"),
+        ("Twitch", "https://www.twitch.tv/{}"),
+        ("Spotify", "https://open.spotify.com/user/{}"),
+        ("Medium", "https://medium.com/@{}"),
+        ("Behance", "https://www.behance.net/{}"),
+        ("Dribbble", "https://dribbble.com/{}"),
+        ("VK", "https://vk.com/{}"),
+        ("OK", "https://ok.ru/{}"),
+        ("Flickr", "https://www.flickr.com/people/{}"),
+        ("SoundCloud", "https://soundcloud.com/{}"),
+        ("DeviantArt", "https://www.deviantart.com/{}"),
+        ("Quora", "https://www.quora.com/profile/{}"),
+        ("Patreon", "https://www.patreon.com/{}"),
+        ("Imgur", "https://imgur.com/user/{}"),
+        ("Steam", "https://steamcommunity.com/id/{}"),
+        ("Roblox", "https://www.roblox.com/user.aspx?username={}"),
+        ("Bitbucket", "https://bitbucket.org/{}"),
+        ("About.me", "https://about.me/{}"),
+        ("Vimeo", "https://vimeo.com/{}"),
+        ("Dailymotion", "https://www.dailymotion.com/{}"),
+        ("Last.fm", "https://www.last.fm/user/{}"),
+        ("Mixcloud", "https://www.mixcloud.com/{}"),
+        ("Issuu", "https://issuu.com/{}"),
+        ("Keybase", "https://keybase.io/{}"),
+        ("Wattpad", "https://www.wattpad.com/user/{}"),
+        ("ReverbNation", "https://www.reverbnation.com/{}"),
+        ("Etsy", "https://www.etsy.com/shop/{}"),
+        ("Xbox", "https://xboxgamertag.com/search/{}")
     ]
 
-    for api in apis:
-        try:
-            r = requests.get(api, headers=HEADERS, timeout=10)
-            if r.status_code != 200:
-                continue
+    for name, url_tpl in platforms:
+        found = False
+        for v in variations:
+            url = url_tpl.format(v)
+            try:
+                r = requests.get(url, headers=HEADERS, timeout=5)
+                if r.status_code == 200 and v.lower() in r.text.lower():
+                    print(f"{Gr}[FOUND]{Wh} {name:<15} -> {url}")
+                    found = True
+                    break
+            except:
+                pass
+        if not found:
+            print(f"{Re}[NONE ]{Wh} {name}")
 
-            data = r.json()
-
-            if "success" in data and data["success"] is False:
-                continue
-
-            for k, v in data.items():
-                print(f"{Wh}{k:<15}:{Gr} {v}")
-            return
-
-        except Exception:
-            continue
-
-    print(f"{Re}[!] All IP services failed (Blocked / Rate Limited)")
-
-# ==============================
-def showDeviceInfo():
-    sub_banner("DEVICE INFORMATION")
-
-    hostname = socket.gethostname()
+# =====================================================
+# (2) PHONE OSINT – 30 DATA POINTS
+# =====================================================
+def phone30():
+    sub_banner("PHONE OSINT (30 DATA POINTS)")
+    num = input(f"{Wh}[+] Phone (+CountryCode) : {Gr}")
 
     try:
-        public_ip = requests.get(
-            "https://api.ipify.org",
-            headers=HEADERS,
-            timeout=5
-        ).text
-    except:
-        public_ip = "Unavailable"
+        p = phonenumbers.parse(num, None)
 
-    print(f"{Gr}Device Name     : {Wh}{hostname}")
-    print(f"{Gr}Public IP      : {Wh}{public_ip}")
-    print(f"{Gr}Local IP       : {Wh}{socket.gethostbyname(hostname)}")
-    print(f"{Gr}OS             : {Wh}{platform.system()} {platform.release()}")
-    print(f"{Gr}Architecture   : {Wh}{platform.machine()}")
-    print(f"{Gr}Processor      : {Wh}{platform.processor()}")
-    print(f"{Gr}Python Version : {Wh}{platform.python_version()}")
-    print(f"{Gr}Language       : {Wh}{locale.getdefaultlocale()}")
+        data = [
+            ("Valid Number", phonenumbers.is_valid_number(p)),
+            ("Possible Number", phonenumbers.is_possible_number(p)),
+            ("Country Code", p.country_code),
+            ("National Number", p.national_number),
+            ("Region Code", phonenumbers.region_code_for_number(p)),
+            ("Country (EN)", geocoder.description_for_number(p, "en")),
+            ("Country (AR)", geocoder.description_for_number(p, "ar")),
+            ("Carrier (EN)", carrier.name_for_number(p, "en")),
+            ("Carrier (AR)", carrier.name_for_number(p, "ar")),
+            ("Timezone", timezone.time_zones_for_number(p)),
+            ("E164 Format", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.E164)),
+            ("International Format", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.INTERNATIONAL)),
+            ("National Format", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.NATIONAL)),
+            ("Number Type", phonenumbers.number_type(p)),
+            ("Mobile?", phonenumbers.number_type(p) == 1),
+            ("Fixed Line?", phonenumbers.number_type(p) == 0),
+            ("Geographical?", phonenumbers.is_number_geographical(p)),
+            ("Italian Leading Zero", p.italian_leading_zero),
+            ("Country Prefix", f"+{p.country_code}"),
+            ("Raw Input", p.raw_input),
+            ("Extension", p.extension),
+            ("Preferred Domestic Carrier", p.preferred_domestic_carrier_code),
+            ("National Destination Code", p.national_destination_code),
+            ("Leading Zeros", p.number_of_leading_zeros),
+            ("Source", "Google libphonenumber"),
+            ("Standard", "ITU-T E.164"),
+            ("OSINT Level", "Public"),
+            ("Owner Name", "Not Available"),
+            ("Exact Location", "Not Available"),
+            ("Privacy Status", "Respected")
+        ]
 
-    if psutil:
-        mem = psutil.virtual_memory()
-        print(f"{Gr}RAM Total      : {Wh}{round(mem.total/1024**3,2)} GB")
-        print(f"{Gr}RAM Usage      : {Wh}{mem.percent}%")
-        print(f"{Gr}CPU Cores      : {Wh}{psutil.cpu_count()}")
+        for i, (k, v) in enumerate(data, 1):
+            print(f"{Wh}{i:02}. {k:<25}:{Gr} {v}")
 
-# ==============================
-def phoneTracker():
-    sub_banner("PHONE OSINT")
-    num = input(f"\n{Wh}[+] Enter Phone (+CountryCode) : {Gr}")
-
-    try:
-        p = phonenumbers.parse(num)
-        print(f"{Gr}Valid           : {Wh}{phonenumbers.is_valid_number(p)}")
-        print(f"{Gr}Country Code    : {Wh}{p.country_code}")
-        print(f"{Gr}Region          : {Wh}{phonenumbers.region_code_for_number(p)}")
-        print(f"{Gr}Carrier         : {Wh}{carrier.name_for_number(p, 'en')}")
-        print(f"{Gr}Location        : {Wh}{geocoder.description_for_number(p, 'en')}")
-        print(f"{Gr}Timezones       : {Wh}{timezone.time_zones_for_number(p)}")
     except:
         print(f"{Re}[!] Invalid phone number")
 
-# ==============================
-def usernameSearch():
-    sub_banner("USERNAME SEARCH")
-    user = input(f"\n{Wh}[+] Enter Username : {Gr}").strip()
-
-    sites = [
-        "https://www.facebook.com/{}",
-        "https://www.instagram.com/{}",
-        "https://github.com/{}",
-        "https://twitter.com/{}",
-        "https://www.tiktok.com/@{}",
-        "https://t.me/{}",
-        "https://www.reddit.com/user/{}"
-    ]
-
-    for site in sites:
-        url = site.format(user)
-        try:
-            r = requests.get(url, headers=HEADERS, timeout=5)
-            if r.status_code == 200:
-                print(f"{Gr}[FOUND] {Wh}{url}")
-            else:
-                print(f"{Re}[NONE ] {Wh}{url}")
-        except:
-            print(f"{Re}[ERR  ] {Wh}{url}")
-
-# ==============================
+# ================= MAIN =================
 def main():
     while True:
         banner()
-        print(f"{Wh}[1] {Gr}IP Tracker")
-        print(f"{Wh}[2] {Gr}My Device Info")
-        print(f"{Wh}[3] {Gr}Phone OSINT")
-        print(f"{Wh}[4] {Gr}Username Search")
-        print(f"{Wh}[0] {Gr}Exit")
+        print(f"{Wh}[1]{Gr} Username OSINT")
+        print(f"{Wh}[2]{Gr} Phone OSINT")
+        print(f"{Wh}[0]{Gr} Exit")
 
-        choice = input(f"\n{Wh}[+] Select : ")
+        c = input(f"\n{Wh}[+] Select : ")
+        if c == '1': TrackLu()
+        elif c == '2': phone30()
+        elif c == '0': sys.exit()
 
-        if choice == "1":
-            IP_Track()
-        elif choice == "2":
-            showDeviceInfo()
-        elif choice == "3":
-            phoneTracker()
-        elif choice == "4":
-            usernameSearch()
-        elif choice == "0":
-            sys.exit()
-        else:
-            print(f"{Re}[!] Invalid option")
+        input(f"\n{Wh}Press Enter...")
 
-        input(f"\n{Wh}Press Enter to continue...")
-
-# ==============================
 if __name__ == "__main__":
     main()
