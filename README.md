@@ -21,7 +21,7 @@
 pkg update && pkg upgrade -y
 pkg install python git clang python-dev -y
 git clone https://github.com/qusaykali1/q.git
-cd q
+cd ip-tracket
 pip install -r requirements.txt
 python tracker.py
 ```
@@ -29,6 +29,6 @@ python tracker.py
 ```
 sudo apt update && sudo apt install python3 python3-pip git -y
 git clone https://github.com/qusaykali1/q.git
-cd q
+cd ip-tracket
 pip3 install -r requirements.txt
 python3 tracker.py
