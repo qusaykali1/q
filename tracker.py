@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
 # CODE BY Qusay_kali
 # Free Palestine 🇵🇸
 
@@ -23,7 +21,6 @@ Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
 HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
 
-# ===== BASIC =====
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
@@ -57,7 +54,6 @@ def sub_banner(title):
 {Wh}         |____________________________________|
 """)
 
-# وظيفة لجلب الماك أدريس
 def get_mac():
     try:
         mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
@@ -65,7 +61,6 @@ def get_mac():
     except:
         return "Unknown"
 
-# ================= IP TRACK =================
 def IP_Track():
     sub_banner("IP TRACKING")
     ip=input(f"{Wh}[+] Target IP : {Gr}").strip()
@@ -96,7 +91,6 @@ def device_info():
     sub_banner("DEVICE AUDIT (COMPLETE)")
     host=socket.gethostname()
 
-    # --- جلب معلومات الموقع الدقيق والماك أدريس ---
     address_full = "N/A"
     try:
         geo_r = requests.get("https://ipwho.is/", timeout=10).json()
@@ -108,7 +102,6 @@ def device_info():
             country = geo_r.get("country")
             maps_link = f"https://www.google.com/maps?q={lat},{lon}"
             
-            # استخدام Geopy للعنوان الدقيق
             if Nominatim:
                 try:
                     geolocator = Nominatim(user_agent="Qusay_kali_Audit")
@@ -129,7 +122,7 @@ def device_info():
 
     info=[
         ("Hostname", host),
-        ("MAC Address", mac_addr), # طلبك الأساسي
+        ("MAC Address", mac_addr), 
         ("Public IP", pub_ip),
         ("Local IP", socket.gethostbyname(host)),
         ("Country", country),
@@ -164,7 +157,6 @@ def device_info():
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ================= PHONE OSINT =================
 def phone_osint():
     sub_banner("PHONE OSINT")
     num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
@@ -214,14 +206,13 @@ def username_osint():
                 print(f"{Re}[NONE ]{Wh} {name}")
         except: pass
 
-# ================= MAIN =================
 def main():
     while True:
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
-        print(f"{Wh}[2]{Gr} Device Information (Precise Loc + MAC)")
-        print(f"{Wh}[3]{Gr} Phone OSINT")
-        print(f"{Wh}[4]{Gr} Username OSINT")
+        print(f"{Wh}[2]{Gr} Device Information")
+        print(f"{Wh}[3]{Gr} Phone number")
+        print(f"{Wh}[4]{Gr} Username")
         print(f"{Wh}[0]{Gr} Exit")
         ch=input(f"{Wh}[+] Select : ")
         if ch=="1": IP_Track()
