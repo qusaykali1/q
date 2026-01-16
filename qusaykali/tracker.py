@@ -12,7 +12,6 @@ except:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# ================= COLORS =================
 Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
 Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
@@ -20,11 +19,9 @@ HEADERS = {
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 }
 
-# ================= CLEAR =================
 def clear():
     os.system("cls" if os.name=="nt" else "clear")
 
-# ================= BANNER =================
 def banner():
     clear()
     print(f"""{Cy}
@@ -38,7 +35,6 @@ def banner():
 {Gr} Free Palestine 🇵🇸
 {Wh}---------------------------------------------------------------""")
 
-# ================= SUB BANNER =================
 def sub_banner(title):
     clear()
     print(f"""
@@ -56,12 +52,10 @@ def sub_banner(title):
 {Wh}          |____________________________________|
 """)
 
-# ================= IP TRACK (FIXED) =================
 def IP_Track():
     sub_banner("IP TRACKING (STABLE)")
     ip = input(f"{Wh}[+] Target IP : {Gr}").strip()
 
-    # check internet (real)
     try:
         requests.get("https://1.1.1.1", timeout=5)
     except:
@@ -93,7 +87,6 @@ def IP_Track():
 
     print(f"{Re}[!] All IP Services Failed")
 
-# ================= DEVICE INFO (40) =================
 def device_info():
     sub_banner("DEVICE AUDIT (40)")
     host = socket.gethostname()
@@ -148,10 +141,9 @@ def device_info():
     for i,(k,v) in enumerate(info,1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
-# ================= PHONE OSINT (~30) =================
 def phone_osint():
     sub_banner("PHONE OSINT")
-    num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
+    num=input(f"{Wh}[+] Phone (+962xxx): {Gr}")
     try:
         p=phonenumbers.parse(num,None)
         data=[
@@ -186,7 +178,6 @@ def phone_osint():
     except:
         print(f"{Re}Invalid Number")
 
-# ================= USERNAME OSINT (40) =================
 def username_osint():
     sub_banner("USERNAME OSINT (40)")
     user=input(f"{Wh}[+] Username : {Gr}").strip()
@@ -251,14 +242,13 @@ def username_osint():
         if not found:
             print(f"{Re}[NONE ]{Wh} {name}")
 
-# ================= MAIN =================
 def main():
     while True:
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
-        print(f"{Wh}[2]{Gr} Device Information (40)")
+        print(f"{Wh}[2]{Gr} Device Information ")
         print(f"{Wh}[3]{Gr} Phone OSINT")
-        print(f"{Wh}[4]{Gr} Username OSINT (40)")
+        print(f"{Wh}[4]{Gr} Username OSINT (")
         print(f"{Wh}[0]{Gr} Exit")
         ch=input(f"{Wh}[+] Select : ")
         if ch=="1": IP_Track()
