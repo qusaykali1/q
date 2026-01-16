@@ -37,8 +37,6 @@ python tracker.py
 ```
 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ```
-Bash
-
 sudo apt update && sudo apt install python3 python3-pip git -y
 git clone [https://github.com/qusaykali1/q.git](https://github.com/qusaykali1/q.git)
 cd q
