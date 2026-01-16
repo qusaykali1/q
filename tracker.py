@@ -11,6 +11,7 @@ except:
 try:
     from geopy.geocoders import Nominatim
 except:
+    from geopy.geocoders import Nominatim
     Nominatim = None
 
 import phonenumbers
@@ -33,15 +34,15 @@ def banner():
 ██║▄▄ ██║██║   ██║╚════██║██╔══██║  ╚██╔╝      ██╔═██╗ ██╔══██║██║     ██║
 ╚██████╔╝╚██████╔╝███████║██║  ██║   ██║       ██║  ██╗██║  ██╗███████╗██║
  ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝{Ye} Qusay_kali
-{Wh}---------------------------------------------------------------
-{Gr} {Cy}Palestine 🇵🇸
-{Wh}---------------------------------------------------------------""")
+{Wh}-----------------------------------------------------------------------------
+{Gr}  {Ye}Instagram : @qusay_kali | {Cy}Palestine 🇵🇸 | {Ye}youtube  : @Qusay_kali
+{Wh}-----------------------------------------------------------------------------""")
 
 def sub_banner(title):
     clear()
     print(f"""
 {Re}                .                         .
-{Re}                //             🇵🇸            \\\\
+{Re}                //                         \\\\
 {Re}               ||      {Wh} .--------------. {Re}      ||
 {Re}               ||    {Wh}.-'                '-. {Re}   ||
 {Re}               ||  {Wh}/    {Re}████      ████    {Wh}\\ {Re} ||
@@ -49,10 +50,16 @@ def sub_banner(title):
 {Re}                \\\\  {Wh}'-.      {Ye}WWWW      {Wh}.-' {Re}  //
 {Re}                 '                         '
 {Wh}          ____________________________________
-{Wh}         | {Cy}ACTION : {Gr}{title:<22}{Wh}   | 
+{Wh}         | {Cy}ACTION : {Gr}{title:<22}{Wh}   |
 {Wh}         | {Cy}AUTHOR : {Wh}Qusay_kali        |  {Wh}|
 {Wh}         |____________________________________|
 """)
+
+def filter_p(val):
+    bad = ["Israel", "IL", "israel"]
+    if any(x in str(val) for x in bad):
+        return f"{Gr}Free Palestine 🇵🇸{Wh}"
+    return val
 
 def get_mac():
     try:
@@ -79,6 +86,7 @@ def IP_Track():
             print(f"\n{Wh}========== IP INFORMATION ==========\n")
             for i,(k,v) in enumerate(r.items(),1):
                 if i>30: break
+                v = filter_p(v)
                 print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
             return
         except:
@@ -98,14 +106,14 @@ def device_info():
             lat = geo_r.get("latitude")
             lon = geo_r.get("longitude")
             city = geo_r.get("city")
-            country = geo_r.get("country")
+            country = filter_p(geo_r.get("country"))
             maps_link = f"https://www.google.com/maps?q={lat},{lon}"
             
             if Nominatim:
                 try:
                     geolocator = Nominatim(user_agent="Qusay_kali_Audit")
                     location = geolocator.reverse(f"{lat}, {lon}")
-                    address_full = location.address if location else "Not Found"
+                    address_full = filter_p(location.address) if location else "Not Found"
                 except:
                     address_full = "Geopy Service Timeout"
         else:
@@ -158,32 +166,34 @@ def device_info():
 
 def phone_osint():
     sub_banner("PHONE OSINT")
-    num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}")
-
+    num=input(f"{Wh}[+] Phone (+962xxx): {Gr}").strip()
+    
+    if not num.startswith('+'): num = '+' + num
+    
     try:
         p=phonenumbers.parse(num,None)
-        if not phonenumbers.is_valid_number(p):
+        if not phonenumbers.is_possible_number(p) and not num.startswith('+972'):
             print(f"{Re}[!] Invalid Phone Number")
             return
     except:
         print(f"{Re}[!] Parsing Error"); return
 
     carrier_name=carrier.name_for_number(p,"en")
-    region_name=geocoder.description_for_number(p,"en")
-    tz=timezone.time_zones_for_number(p)
+    region_name=filter_p(geocoder.description_for_number(p,"en"))
+    country_name=filter_p(geocoder.country_name_for_number(p, "en"))
     
+    if num.startswith('+972'):
+        country_name = f"{Gr}Free Palestine 🇵🇸{Wh}"
+        region_name = f"{Gr}Occupied Palestine{Wh}"
+
+    tz=timezone.time_zones_for_number(p)
     ntype = phonenumbers.number_type(p)
     line_type = "Unknown"
     if ntype == 1: line_type = "Mobile"
     elif ntype == 0: line_type = "Fixed Line"
-    elif ntype == 2: line_type = "Fixed Line or Mobile"
-    elif ntype == 3: line_type = "Toll Free"
-    elif ntype == 4: line_type = "Premium Rate"
-    elif ntype == 5: line_type = "Shared Cost"
-    elif ntype == 6: line_type = "VoIP"
 
     result=[
-        ("Country", geocoder.country_name_for_number(p, "en")),
+        ("Country", country_name),
         ("Region/City", region_name),
         ("Carrier", carrier_name if carrier_name else "Unknown"),
         ("Line Type", line_type),
@@ -258,5 +268,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
-
