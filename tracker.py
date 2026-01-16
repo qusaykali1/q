@@ -20,6 +20,9 @@ from phonenumbers import carrier, geocoder, timezone
 Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
 Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
 
+PAL_EN = f"{Re}P{Gr}A{Wh}L{Bl}E{Re}S{Gr}T{Wh}I{Bl}N{Re}E{Wh}"
+FREE_PAL = f"{Gr} {PAL_EN} 🇵🇸{Wh}"
+
 HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
 
 def clear():
@@ -35,7 +38,7 @@ def banner():
 ╚██████╔╝╚██████╔╝███████║██║  ██║   ██║       ██║  ██╗██║  ██╗███████╗██║
  ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝{Ye} Qusay_kali
 {Wh}-----------------------------------------------------------------------------
-{Gr}  {Ye}Instagram : @qusay_kali | {Cy}Palestine 🇵🇸 | {Ye}youtube  : @Qusay_kali
+{Gr}  {Ye}Instagram : @qusay_kali | {FREE_PAL} | {Ye}youtube  : @Qusay_kali
 {Wh}-----------------------------------------------------------------------------""")
 
 def sub_banner(title):
@@ -58,7 +61,7 @@ def sub_banner(title):
 def filter_p(val):
     bad = ["Israel", "IL", "israel"]
     if any(x in str(val) for x in bad):
-        return f"{Gr}Free Palestine 🇵🇸{Wh}"
+        return FREE_PAL
     return val
 
 def get_mac():
@@ -166,7 +169,7 @@ def device_info():
 
 def phone_osint():
     sub_banner("PHONE OSINT")
-    num=input(f"{Wh}[+] Phone (+962xxx): {Gr}").strip()
+    num=input(f"{Wh}[+] Phone (+CountryCode): {Gr}").strip()
     
     if not num.startswith('+'): num = '+' + num
     
@@ -183,8 +186,8 @@ def phone_osint():
     country_name=filter_p(geocoder.country_name_for_number(p, "en"))
     
     if num.startswith('+972'):
-        country_name = f"{Gr}Free Palestine 🇵🇸{Wh}"
-        region_name = f"{Gr}Occupied Palestine{Wh}"
+        country_name = FREE_PAL
+        region_name = f"{Gr}Occupied {PAL_EN}{Wh}"
 
     tz=timezone.time_zones_for_number(p)
     ntype = phonenumbers.number_type(p)
