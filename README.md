@@ -25,7 +25,7 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 
 ## 🛠️ Installation & Execution | التحميل والتشغيل
 
-  <img src="s.png" alt="Installation Guide">
+  <img src="img/s.png" alt="Installation Guide">
 
 ### 📱 1. Termux (Android) | تريمكس
 ```bash
@@ -37,8 +37,10 @@ A professional intelligence gathering (**OSINT**) tool designed by **Qusay_kali*
 6.python tracker.py
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### 🐉 2. Kali Linux / Ubuntu | كالي لينكس
-## 🛠️ Installation & Execution | التحميل والتشغيل
-```bash
+## 🛠️ Installation & Execution |
+التحميل والتشغيل
+  <img src="img/s.png" alt="Installation Guide">
+```
 1.sudo apt update && sudo apt install python3 python3-pip git -y
 2.git clone https://github.com/qusaykali1/q.git
 3.cd q
