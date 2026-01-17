@@ -1,7 +1,7 @@
 # 🛡️  ip-tracker Tool 
 
 <p align="center">
-  <img src="https://github.com/qusaykali1/q/blob/main/qusaykali/img/s.png" alt=" Guide">
+  <img src="https://github.com/qusaykali1/ip-tracker/blob/main/qusaykali/img/cc.png" alt=" Guide">
 </p>
 
 أداة استخبارات رقمية (**OSINT**) احترافية وقوية من تطوير **Qusay_kali**. تتيح الأداة استخراج بيانات عميقة لعنوان الأيبي، فحص عتاد الأجهزة، تحليل أرقام الهواتف، والبحث عن الحسابات في أكثر من **40 منصة عالمية**.
