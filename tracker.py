@@ -63,6 +63,8 @@ def banner():
 
 def sub_banner(title=""):
     clear()
+ def sub_banner(title=""):
+    clear()
     print(f"""
 {Re}                 .                         .
 {Re}                //                         \\\\
@@ -323,10 +325,10 @@ def fetch_from_source(name, base_url, regex_pat, filename):
 
 def additional_cams_menu():
     while True:
-        sub_banner("Additional Public Cam Sources")
-        print(f"{Wh}[1]{Gr} EarthCam (tourist & live cams)")
-        print(f"{Wh}[2]{Gr} SkylineWebcams (European live cams)")
-        print(f"{Wh}[3]{Gr} Opentopia (alternative open cams)")
+        sub_banner(" Public Cam ")
+        print(f"{Wh}[1]{Gr} EarthCam")
+        print(f"{Wh}[2]{Gr} SkylineWebcams ")
+        print(f"{Wh}[3]{Gr} Opentopia ")
         print(f"{Wh}[0]{Gr} Back / Exit")
         choice = input(f"\n{Wh}[+] Select source (1-3 or 0): {Gr}").strip()
 
