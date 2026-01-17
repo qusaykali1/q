@@ -25,7 +25,7 @@ cd ip-tracker
 pip install -r requirements.txt
 python tracker.py
 ```
-###**🐉 2. Kali Linux / Ubuntu | **كالي لينكس
+🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ```
 sudo apt update && sudo apt install python3 python3-pip git -y
 git clone https://github.com/qusaykali1/ip-tracker.git
