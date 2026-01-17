@@ -48,7 +48,7 @@ def banner():
   ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
   ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
 -----------------------------------------------------------------------------
-{Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
+{Gr} {Ye}Instagram : @qusay_kali | {Ye}youtube : @Qusay_kali
 {Wh}-----------------------------------------------------------------------------""")
 
 def sub_banner(title):
@@ -395,3 +395,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
