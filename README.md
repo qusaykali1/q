@@ -20,7 +20,7 @@
 ```bash
 pkg update && pkg upgrade -y
 pkg install python git clang python-dev -y
-git clone https://github.com/qusaykali1/q.git
+git clone https://github.com/qusaykali1/ip-tracker.git
 cd ip-tracker
 pip install -r requirements.txt
 python tracker.py
@@ -28,7 +28,7 @@ python tracker.py
 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ```
 sudo apt update && sudo apt install python3 python3-pip git -y
-git clone https://github.com/qusaykali1/q.git
+git clone https://github.com/qusaykali1/ip-tracker.git
 cd ip-tracker
 pip3 install -r requirements.txt
 python3 tracker.py
