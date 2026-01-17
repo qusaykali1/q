@@ -28,25 +28,35 @@ import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
 # Colors
-Bl='\033[30m'; Re='\033[1;31m'; Gr='\033[1;32m'; Ye='\033[1;33m'
-Blu='\033[1;34m'; Mage='\033[1;35m'; Cy='\033[1;36m'; Wh='\033[1;37m'
+Bl = '\033[30m'
+Re = '\033[1;31m'
+Gr = '\033[1;32m'
+Ye = '\033[1;33m'
+Blu = '\033[1;34m'
+Mage = '\033[1;35m'
+Cy = '\033[1;36m'
+Wh = '\033[1;37m'
+
 PAL_EN = f"{Re}P{Gr}A{Wh}L{Bl}E{Re}S{Gr}T{Wh}I{Bl}N{Re}E{Wh}"
 FREE_PAL = f"{Gr} {PAL_EN} 🇵🇸{Wh}"
-HEADERS={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+}
 
 def clear():
-    os.system("cls" if os.name=="nt" else "clear")
+    os.system("cls" if os.name == "nt" else "clear")
 
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                      
-  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
-  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
-  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
-  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
-  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
-  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
+                                                                                     
+  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
+  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
+  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
+  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
+  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -89,15 +99,15 @@ def get_mac():
 
 def IP_Track():
     sub_banner("IP TRACKER ")
-    ip=input(f"{Wh}[+] Target IP : {Gr}").strip()
-    
+    ip = input(f"{Wh}[+] Target IP : {Gr}").strip()
+   
     apis = [
         f"http://ip-api.com/json/{ip}",
         f"https://ipapi.co/{ip}/json/",
         f"https://ipwho.is/{ip}",
         f"https://ipinfo.io/{ip}/json"
     ]
-    
+   
     all_data = {}
     for api in apis:
         try:
@@ -106,7 +116,7 @@ def IP_Track():
                 all_data.update(r)
         except:
             pass
-    
+   
     if all_data:
         print(f"\n{Wh}========== DETAILED IP INFORMATION (MERGED) ==========\n")
         for i, (k, v) in enumerate(all_data.items(), 1):
@@ -119,8 +129,8 @@ def IP_Track():
         print(f"{Re}[!] No IP data found")
 
 def device_info():
-    sub_banner("Device Inmformation ")
-    host=socket.gethostname()
+    sub_banner("Device Information ")
+    host = socket.gethostname()
     address_full = "N/A"
     try:
         geo_r = requests.get("https://ipwho.is/", timeout=10).json()
@@ -131,7 +141,7 @@ def device_info():
             city = geo_r.get("city")
             country = filter_p(geo_r.get("country"))
             maps_link = f"https://www.google.com/maps?q={lat},{lon}"
-           
+          
             if Nominatim:
                 try:
                     geolocator = Nominatim(user_agent="Qusay_kali_Audit")
@@ -145,10 +155,10 @@ def device_info():
     except:
         pub_ip = "Offline"
         lat = lon = city = country = maps_link = "Error"
-    mem=psutil.virtual_memory() if psutil else None
-    disk=psutil.disk_usage("/") if psutil else None
+    mem = psutil.virtual_memory() if psutil else None
+    disk = psutil.disk_usage("/") if psutil else None
     mac_addr = get_mac()
-    info=[
+    info = [
         ("Hostname", host),
         ("MAC Address", mac_addr),
         ("Public IP", pub_ip),
@@ -181,35 +191,35 @@ def device_info():
         ("Final Check", "CLEAN")
     ]
     print(f"\n{Wh}========== DEVICE & LOCATION INFO ==========\n")
-    for i,(k,v) in enumerate(info,1):
+    for i, (k, v) in enumerate(info, 1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
 def phone_osint():
     sub_banner("Phone Number")
-    num=input(f"{Wh}[+] Phone (+962xxxxxx): {Gr}").strip()
-   
+    num = input(f"{Wh}[+] Phone (+962xxxxxx): {Gr}").strip()
+  
     if not num.startswith('+'): num = '+' + num
-   
+  
     try:
-        p=phonenumbers.parse(num,None)
+        p = phonenumbers.parse(num, None)
         if not phonenumbers.is_possible_number(p) and not num.startswith('+972'):
             print(f"{Re}[!] Invalid Phone Number")
             return
     except:
         print(f"{Re}[!] Parsing Error"); return
-    carrier_name=carrier.name_for_number(p,"en") or "Unknown"
-    region_name=filter_p(geocoder.description_for_number(p,"en"))
-    country_name=filter_p(geocoder.country_name_for_number(p, "en"))
-   
+    carrier_name = carrier.name_for_number(p, "en") or "Unknown"
+    region_name = filter_p(geocoder.description_for_number(p, "en"))
+    country_name = filter_p(geocoder.country_name_for_number(p, "en"))
+  
     if num.startswith('+972'):
         country_name = "Palestine"
         region_name = f"{Gr}Occupied Palestine{Wh}"
-    tz=timezone.time_zones_for_number(p)
+    tz = timezone.time_zones_for_number(p)
     ntype = phonenumbers.number_type(p)
     line_type = "Unknown"
     if ntype == 1: line_type = "Mobile"
     elif ntype == 0: line_type = "Fixed Line"
-    result=[
+    result = [
         ("Country", country_name),
         ("Region/City", region_name),
         ("Carrier", carrier_name),
@@ -223,7 +233,7 @@ def phone_osint():
         ("RFC3966", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.RFC3966))
     ]
     print(f"\n{Wh}====== ADVANCED PHONE ANALYSIS ======\n")
-    for i,(k,v) in enumerate(result,1):
+    for i, (k, v) in enumerate(result, 1):
         print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
 
 async def check_username(session, name, url_template, var, semaphore):
@@ -251,32 +261,32 @@ async def username_osint_async(user, platforms, variations):
 
 def username_osint():
     sub_banner("USERNAME OSINT")
-    user=input(f"{Wh}[+] Username : {Gr}").strip()
-   
-    platforms=[
-        ("Facebook","https://facebook.com/{}"),
-        ("Instagram","https://instagram.com/{}"),
-        ("Twitter","https://twitter.com/{}"),
-        ("TikTok","https://tiktok.com/@{}"),
-        ("GitHub","https://github.com/{}"),
-        ("Telegram","https://t.me/{}"),
-        ("Snapchat","https://snapchat.com/add/{}"),
-        ("Reddit","https://reddit.com/user/{}"),
-        ("YouTube","https://youtube.com/@{}"),
-        ("Pinterest","https://pinterest.com/{}"),
-        ("LinkedIn","https://linkedin.com/in/{}"),
-        ("Twitch","https://twitch.tv/{}"),
-        ("Medium","https://medium.com/@{}"),
-        ("Behance","https://behance.net/{}"),
-        ("Dribbble","https://dribbble.com/{}"),
-        ("Vimeo","https://vimeo.com/{}"),
-        ("SoundCloud","https://soundcloud.com/{}"),
-        ("DeviantArt","https://deviantart.com/{}"),
-        ("VK","https://vk.com/{}"),
-        ("About.me","https://about.me/{}"),
-        ("Steam","https://steamcommunity.com/id/{}"),
-        ("Spotify","https://open.spotify.com/user/{}"),
-        ("Pinterest","https://www.pinterest.com/{}")
+    user = input(f"{Wh}[+] Username : {Gr}").strip()
+  
+    platforms = [
+        ("Facebook", "https://facebook.com/{}"),
+        ("Instagram", "https://instagram.com/{}"),
+        ("Twitter", "https://twitter.com/{}"),
+        ("TikTok", "https://tiktok.com/@{}"),
+        ("GitHub", "https://github.com/{}"),
+        ("Telegram", "https://t.me/{}"),
+        ("Snapchat", "https://snapchat.com/add/{}"),
+        ("Reddit", "https://reddit.com/user/{}"),
+        ("YouTube", "https://youtube.com/@{}"),
+        ("Pinterest", "https://pinterest.com/{}"),
+        ("LinkedIn", "https://linkedin.com/in/{}"),
+        ("Twitch", "https://twitch.tv/{}"),
+        ("Medium", "https://medium.com/@{}"),
+        ("Behance", "https://behance.net/{}"),
+        ("Dribbble", "https://dribbble.com/{}"),
+        ("Vimeo", "https://vimeo.com/{}"),
+        ("SoundCloud", "https://soundcloud.com/{}"),
+        ("DeviantArt", "https://deviantart.com/{}"),
+        ("VK", "https://vk.com/{}"),
+        ("About.me", "https://about.me/{}"),
+        ("Steam", "https://steamcommunity.com/id/{}"),
+        ("Spotify", "https://open.spotify.com/user/{}"),
+        ("Pinterest", "https://www.pinterest.com/{}")
     ]
     variations = [user, user.capitalize(), user.lower(), user.upper()]
     for i in ['1']:
@@ -291,10 +301,55 @@ def username_osint():
     else:
         print(f"{Re}[!] No profiles found")
 
+def fetch_from_source(name, base_url, regex_pat, filename):
+    print(f"{Ye}[+] Fetching from {name} ...{Wh}")
+    links = []
+    try:
+        res = requests.get(base_url, headers=HEADERS, timeout=12)
+        found = re.findall(regex_pat, res.text)
+        cleaned = [link for link in found if len(link) > 20 and any(kw in link.lower() for kw in ["cam", "live", "webcam", "stream"])]
+        links.extend(cleaned)
+        if links:
+            with open(filename, 'w', encoding='utf-8') as f:
+                for link in links:
+                    print(f"{Gr}{link}{Wh}")
+                    f.write(link + '\n')
+            print(f"{Gr}Saved {len(links)} links from {name} to {filename}{Wh}")
+        else:
+            print(f"{Re}No useful links found from {name}{Wh}")
+    except Exception as e:
+        print(f"{Re}Error fetching {name}: {e}{Wh}")
+    return links
 
-def insecam_cams():
-    sub_banner(" Camera ")
-    
+def additional_cams_menu():
+    while True:
+        sub_banner("Additional Public Cam Sources")
+        print(f"{Wh}[1]{Gr} EarthCam (tourist & live cams)")
+        print(f"{Wh}[2]{Gr} SkylineWebcams (European live cams)")
+        print(f"{Wh}[3]{Gr} Opentopia (alternative open cams)")
+        print(f"{Wh}[0]{Gr} Back / Exit")
+        choice = input(f"\n{Wh}[+] Select source (1-3 or 0): {Gr}").strip()
+
+        if choice == "0":
+            break
+
+        sources = {
+            "1": ("EarthCam", "https://www.earthcam.com/", r'(https?://(?:www\.)?earthcam\.com[^"\s\'<>\)]+)'),
+            "2": ("SkylineWebcams", "https://www.skylinewebcams.com/", r'(https?://[^"\s\'<>\)]+skylinewebcams\.com[^"\s\'<>\)]*)'),
+            "3": ("Opentopia", "https://www.opentopia.com/", r'(https?://[^"\s\'<>\)]+opentopia\.com[^"\s\'<>\)]*)'),
+        }
+
+        if choice in sources:
+            name, url, regex = sources[choice]
+            filename = f"{name.lower()}_cams.txt"
+            fetch_from_source(name, url, regex, filename)
+            input(f"{Wh}Press Enter to continue...")
+        else:
+            print(f"{Re}[!] Invalid choice{Wh}")
+
+def cam_hacker():
+    sub_banner(" Cam Hacker ")
+   
     try:
         import colorama
         colorama.init()
@@ -303,72 +358,65 @@ def insecam_cams():
         return
 
     url = "http://www.insecam.org/en/jsoncountries/"
-    headers = {"User-Agent": "Mozilla/5.0"}
-
     try:
-        resp = requests.get(url, headers=headers, timeout=10)
+        resp = requests.get(url, headers=HEADERS, timeout=10)
         data = resp.json()
         countries = data.get('countries', {})
     except Exception as e:
-        print(f"{Re}Error fetching countries: {e}{Wh}")
+        print(f"{Re}Error fetching countries from Insecam: {e}{Wh}")
+        print(f"{Ye}Press n to skip Insecam and go to other sources{Wh}")
+        country_input = input(f"\n{Ye}Enter Country Code (##) or n to skip: {Gr}").upper().strip()
+        if country_input in ["N", "n"]:
+            additional_cams_menu()
+            return
+        country = country_input
+    else:
+        ordered = {}
+        if "IL" in countries:
+            ordered["PS"] = {"country": "Palestine", "count": countries["IL"]["count"]}
+            del countries["IL"]
+        ordered.update(countries)
+
+        print(f"{Wh}Available Countries / Cameras count:\n")
+        for key, value in ordered.items():
+            print(f"{Gr}Code: ({key}) - {value['country']} / ({value['count']} cameras){Wh}")
+
+        country_input = input(f"\n{Ye}Enter Country Code (##) or n to skip Insecam: {Gr}").upper().strip()
+
+        if country_input in ["N", "n"]:
+            additional_cams_menu()
+            return
+        country = country_input
+
+    if not country:
+        print(f"{Re}No code entered.{Wh}")
         return
 
-    ordered = {}
-    if "IL" in countries:
-        ordered["PS"] = {
-            "country": "Palestine",
-            "count": countries["IL"]["count"]
-        }
-        del countries["IL"]
-
-    for k, v in countries.items():
-        ordered[k] = v
-
-    print(f"{Wh}Available Countries / Cameras count:\n")
-    for key, value in ordered.items():
-        print(f"{Gr}Code: ({key}) - {value['country']} / ({value['count']} cameras){Wh}")
-
+    print(f"{Gr}Fetching cameras from Insecam for {country} ...{Wh}\n")
+    all_links = []
+    filename = f"{country}_insecam_cams.txt"
     try:
-        country = input(f"\n{Ye}Enter Country Code (##): {Gr}").upper().strip()
-        if not country:
-            print(f"{Re}No code entered.{Wh}")
-            return
-
-        print(f"{Gr}Fetching cameras from {country} ...{Wh}\n")
-
-        res = requests.get(
-            f"http://www.insecam.org/en/bycountry/{country}",
-            headers=headers,
-            timeout=10
-        )
-
+        res = requests.get(f"http://www.insecam.org/en/bycountry/{country}", headers=HEADERS, timeout=10)
         pages = re.findall(r'pagenavigator\("\?page=",\s*(\d+)', res.text)
         last_page = int(pages[0]) if pages else 1
 
-        filename = f"{country}_cams.txt"
-        with open(filename, 'a', encoding='utf-8') as f:
+        with open(filename, 'w', encoding='utf-8') as f:
             count = 0
             for page in range(last_page):
-                res = requests.get(
-                    f"http://www.insecam.org/en/bycountry/{country}/?page={page}",
-                    headers=headers,
-                    timeout=10
-                )
-
-                find_ip = re.findall(
-                    r"http://\d{1,3}(?:\.\d{1,3}){3}:\d+",
-                    res.text
-                )
-
+                res = requests.get(f"http://www.insecam.org/en/bycountry/{country}/?page={page}", headers=HEADERS, timeout=10)
+                find_ip = re.findall(r'http://\d{1,3}(?:\.\d{1,3}){3}:\d+', res.text)
                 for ip in find_ip:
                     print(f"{Gr}{ip}{Wh}")
                     f.write(ip + '\n')
+                    all_links.append(ip)
                     count += 1
-
-        print(f"\n{Gr}Done! Saved {count} cameras to: {filename}{Wh}")
-
+        print(f"\n{Gr}Done! Saved {count} Insecam cameras to: {filename}{Wh}")
     except Exception as e:
-        print(f"{Re}Error: {e}{Wh}")
+        print(f"{Re}Insecam error: {e}{Wh}")
+
+    add_more = input(f"\n{Ye}Do you want to add cameras from other public sites? (y/1 for yes): {Gr}").strip().lower()
+    if add_more in ["y", "1", "yes"]:
+        additional_cams_menu()
 
 def main():
     while True:
@@ -380,7 +428,6 @@ def main():
         print(f"{Wh}[5]{Gr} Cam-hacker")
         print(f"{Wh}[0]{Gr} Exit")
         ch = input(f"\n{Wh}[+] Select : ").strip()
-
         if ch == "1":
             IP_Track()
         elif ch == "2":
@@ -390,16 +437,13 @@ def main():
         elif ch == "4":
             username_osint()
         elif ch == "5":
-            insecam_cams()
+            cam_hacker()
         elif ch == "0":
             print(f"{Gr}Goodbye! Free Palestine 🇵🇸")
             sys.exit(0)
         else:
             print(f"{Re}[!] Invalid choice")
-
         input(f"{Wh}\nPress Enter to return...")
 
 if __name__ == "__main__":
     main()
-
-
