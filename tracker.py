@@ -121,13 +121,13 @@ def clear():
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                      
-  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
-  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
-  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
-  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
-  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
-  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
+                                                                                     
+  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
+  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
+  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
+  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
+  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -469,17 +469,57 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 
 
-
-
-
 def username_osint():
     sub_banner("USERNAME OSINT")
     user = input(f"{Wh}[+] Username: {Gr}").strip()
-    if not user: return
+    if not user:
+        return
 
     print(f"\n{Gr}[*] Searching for {Ye}{user}{Gr}...{Wh}\n")
 
-    found = asyncio.run(sherlock_search(user))
+    # تحميل data.json
+    import json
+    try:
+        with open("data.json", "r", encoding="utf-8") as f:
+            data_json = json.load(f)
+    except Exception as e:
+        print(f"{Re}[!] Failed to load data.json: {e}{Wh}")
+        return
+
+    # استدعاء البحث async
+    import asyncio
+
+    async def check_username(session, site, url_template, variation, semaphore):
+        import aiohttp
+        async with semaphore:
+            try:
+                url = url_template.format(variation)
+                async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
+                    if r.status in [200, 301, 302]:
+                        text = await r.text()
+                        not_found = ["not found", "404", "doesn't exist", "profile not found"]
+                        if not any(x in text.lower() for x in not_found):
+                            return (site, url)
+                    return None
+            except:
+                return None
+
+    async def username_osint_async(user, data_json):
+        import aiohttp
+        semaphore = asyncio.Semaphore(20)
+        async with aiohttp.ClientSession() as session:
+            tasks = []
+            for site, info in data_json.items():
+                url_template = info.get("url") if isinstance(info, dict) else info
+                variations = [user, user.lower(), user.upper(), user.capitalize()]
+                for var in variations:
+                    tasks.append(check_username(session, site, url_template, var, semaphore))
+            results = await asyncio.gather(*tasks)
+            # تصفية النتائج الصحيحة فقط
+            return [res for res in results if res]
+
+    # تشغيل البحث
+    found = asyncio.run(username_osint_async(user, data_json))
 
     if found:
         print(f"{Gr}======= FOUND ({len(found)}) =======\n")
@@ -489,6 +529,7 @@ def username_osint():
         print(f"{Re}[!] No accounts found.{Wh}")
 
     input(f"{Wh}\nPress Enter to continue...")
+
 
 def phone_osint():
     sub_banner("Phone Number OSINT")
