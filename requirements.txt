@@ -5,5 +5,3 @@ psutil
 geopy
 colorama
 urllib3
-   
-
