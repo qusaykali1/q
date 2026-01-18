@@ -14,7 +14,7 @@ import re
 import uuid
 import asyncio
 import aiohttp
-import webbrowser  
+import webbrowser  # Optional: to open map automatically
 
 try:
     import psutil
@@ -52,13 +52,13 @@ def clear():
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                      
-  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
-  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
-  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
-  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
-  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
-  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
+                                                                                     
+  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
+  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
+  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
+  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
+  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
+  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -385,81 +385,72 @@ def IP_Track():
 
         input(f"{Wh}\nPress Enter to continue...")
 
-async def check_username(session, name, url_template, var, semaphore):
+async def sherlock_check(session, site_name, site_url, username, semaphore):
     async with semaphore:
         try:
-            url = url_template.format(var)
-            async with session.get(url, headers=HEADERS, timeout=5) as r:
-                if r.status in [200, 301, 302]:
-                    content = await r.text()
-                    content_lower = content.lower()
-                    not_found = ["not found", "page not found", "404", "doesn't exist", "user not found", "profile not found"]
-                    if not any(kw in content_lower for kw in not_found):
-                        return (name, var, url, True)
-                return (name, var, url, False)
+            url = site_url.format(username=username)
+            async with session.head(url, allow_redirects=True, timeout=5) as resp:
+                if resp.status == 200:
+                    final_url = str(resp.url)
+                    # رفض الصفحات اللي بترجع لتسجيل دخول أو صفحة رئيسية
+                    if any(x in final_url.lower() for x in ["login", "signup", "join", "register", "auth"]):
+                        return None
+                    # نجاح حقيقي
+                    return (site_name, url)
+                return None
         except:
-            return (name, var, url, False)
+            return None
 
-async def username_osint_async(user, platforms, variations):
-    semaphore = asyncio.Semaphore(20)
-    async with aiohttp.ClientSession() as session:
-        tasks = [check_username(session, name, url, var, semaphore) for name, url in platforms for var in variations]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        found = [res for res in results if isinstance(res, tuple) and res[3]]
-        return found
+def setup_database():
+    file_path = "data.json"
+    url = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock/resources/data.json"
+    
+    if not os.path.exists(file_path):
+        print(f"{Ye}[*] First time setup: Downloading database...{Wh}")
+        try:
+            r = requests.get(url, timeout=20, verify=False) 
+            if r.status_code == 200:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(r.text)
+                print(f"{Gr}[+] Database ready!{Wh}")
+            else:
+                print(f"{Re}[!] Server returned error {r.status_code}{Wh}")
+        except Exception as e:
+            print(f"{Re}[!] Download failed: {e}{Wh}")
+
+setup_database()
+
+async def sherlock_search(username):
+    file_path = "data.json"
+    if not os.path.exists(file_path):
+        return []
+        
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    return [] 
 
 def username_osint():
     sub_banner("USERNAME OSINT")
-    user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
+    user = input(f"{Wh}[+] Username: {Gr}").strip()
+    if not user: return
 
-    if not user:
-        return
+    print(f"\n{Gr}[*] Searching for {Ye}{user}{Gr}...{Wh}\n")
 
-    platforms = [
-        ("Facebook", "https://facebook.com/{}"),
-        ("Instagram", "https://instagram.com/{}"),
-        ("Twitter", "https://twitter.com/{}"),
-        ("TikTok", "https://tiktok.com/@{}"),
-        ("GitHub", "https://github.com/{}"),
-        ("Telegram", "https://t.me/{}"),
-        ("Snapchat", "https://snapchat.com/add/{}"),
-        ("Reddit", "https://reddit.com/user/{}"),
-        ("YouTube", "https://youtube.com/@{}"),
-        ("Pinterest", "https://pinterest.com/{}"),
-        ("LinkedIn", "https://linkedin.com/in/{}"),
-        ("Twitch", "https://twitch.tv/{}"),
-        ("Medium", "https://medium.com/@{}"),
-        ("Behance", "https://behance.net/{}"),
-        ("Dribbble", "https://dribbble.com/{}"),
-        ("Vimeo", "https://vimeo.com/{}"),
-        ("SoundCloud", "https://soundcloud.com/{}"),
-        ("DeviantArt", "https://deviantart.com/{}"),
-        ("VK", "https://vk.com/{}"),
-        ("About.me", "https://about.me/{}"),
-        ("Steam", "https://steamcommunity.com/id/{}"),
-        ("Spotify", "https://open.spotify.com/user/{}"),
-    ]
-    variations = [user, user.capitalize(), user.lower(), user.upper()]
-    for i in ['1', '69', 'x', '_', '.']:
-        variations += [i + var for var in variations] + [var + i for var in variations]
-    variations = list(set(variations))
-
-    print(f"\n{Wh}[*] Searching {Ye}{user}{Wh} across {len(platforms)} platforms...\n")
-
-    found = asyncio.run(username_osint_async(user, platforms, variations))
+    found = asyncio.run(sherlock_search(user))
 
     if found:
-        print(f"{Gr}======= FOUND ACCOUNTS =======\n")
-        for name, var, url, _ in found:
-            print(f"{Gr}[FOUND]{Wh} {name:<15} ({var}) → {url}")
+        print(f"{Gr}======= FOUND ({len(found)}) =======\n")
+        for name, url in found:
+            print(f"{Gr}[FOUND]{Wh} {name:<25} → {url}")
     else:
-        print(f"{Re}[!] No accounts found")
+        print(f"{Re}[!] No accounts found.{Wh}")
 
     input(f"{Wh}\nPress Enter to continue...")
 
 def phone_osint():
     sub_banner("Phone Number OSINT")
-    num = input(f"{Wh}[+] +962xxxx  (press Enter to go back): {Gr}").strip()
+    num = input(f"{Wh}[+] Phone number (press Enter to go back): {Gr}").strip()
 
     if not num:
         return
@@ -751,4 +742,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
