@@ -1,5 +1,6 @@
 # CODE BY Qusay_kali
 # Free Palestine 🇵🇸
+
 import os
 import socket
 import platform
@@ -13,7 +14,7 @@ import re
 import uuid
 import asyncio
 import aiohttp
-import webbrowser  
+import webbrowser  # Optional: to open map automatically
 
 try:
     import psutil
@@ -28,6 +29,7 @@ except ImportError:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
+# Colors
 Bl = '\033[30m'
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
@@ -174,13 +176,13 @@ def get_country_info(country_name):
             independent = "Yes" if data.get("independent") else "No"
             start_of_week = data.get("startOfWeek", "N/A")
             latlng = data.get("latlng", ["N/A", "N/A"])
-            highest_point = "N/A"  
-            lowest_point = "N/A"   
+            highest_point = "N/A"  # Would need additional API
+            lowest_point = "N/A"   # Would need additional API
             fifa = data.get("fifa", "N/A")
-            ioc = "N/A"  
+            ioc = "N/A"  # Not directly available
 
             favorite_foods = {
-                "Jordan": "Mansaf ",
+                "Jordan": "Mansaf (lamb cooked in fermented yogurt sauce)",
                 "United States": "Hamburger",
                 "France": "Croissant",
                 "Italy": "Pizza",
@@ -303,40 +305,65 @@ def IP_Track():
         print(f"\n{Wh}========== IP INFORMATION ==========\n")
 
         important = [
-            ("IP", all_data.get("query") or all_data.get("ip") or all_data.get("addr")),
-            ("Status", all_data.get("status")),
-            ("Continent", filter_p(all_data.get("continent") or all_data.get("continent_name"))),
-            ("Continent Code", all_data.get("continentCode") or all_data.get("continent_code")),
-            ("Country", filter_p(all_data.get("country") or all_data.get("country_name"))),
-            ("Country Code", all_data.get("countryCode") or all_data.get("country_code")),
-            ("Region", all_data.get("regionName") or all_data.get("region")),
-            ("Region Code", all_data.get("region") or all_data.get("region_code")),
-            ("District", all_data.get("district")),
-            ("City", all_data.get("city")),
-            ("ZIP", all_data.get("zip") or all_data.get("postal")),
-            ("Latitude", all_data.get("latitude") or all_data.get("lat")),
-            ("Longitude", all_data.get("longitude") or all_data.get("lon")),
-            ("Timezone", all_data.get("timezone")),
-            ("Offset", all_data.get("offset")),
-            ("Currency", all_data.get("currency")),
-            ("ISP", all_data.get("isp")),
-            ("Organization", all_data.get("org") or all_data.get("organisation")),
-            ("AS", all_data.get("as") or all_data.get("asn")),
-            ("AS Name", all_data.get("asname")),
-            ("Reverse DNS", all_data.get("reverse")),
-            ("Mobile", all_data.get("mobile")),
-            ("Proxy", all_data.get("proxy")),
-            ("Hosting", all_data.get("hosting")),
-            ("Type", all_data.get("type")),
-            ("Connection Type", all_data.get("connection_type")),
-            ("Abuse Confidence", all_data.get("abuse_confidence_score")),  # From db-ip if available
-            ("Usage Type", all_data.get("usage_type")),
-            ("Domain", all_data.get("domain")),
+            ("ip", all_data.get("query") or all_data.get("ip") or all_data.get("addr") or "N/A"),
+            ("network", all_data.get("network") or "N/A"),
+            ("version", all_data.get("version") or "N/A"),
+            ("city", all_data.get("city") or "N/A"),
+            ("region", all_data.get("regionName") or all_data.get("region") or "N/A"),
+            ("region_code", all_data.get("region_code") or "N/A"),
+            ("country", filter_p(all_data.get("country") or all_data.get("country_name")) or "N/A"),
+            ("country_name", filter_p(all_data.get("country_name") or all_data.get("country")) or "N/A"),
+            ("country_code", all_data.get("countryCode") or all_data.get("country_code") or "N/A"),
+            ("country_code_iso3", all_data.get("country_code_iso3") or "N/A"),
+            ("country_capital", all_data.get("country_capital") or "N/A"),
+            ("country_tld", all_data.get("country_tld") or "N/A"),
+            ("continent_code", all_data.get("continentCode") or all_data.get("continent_code") or "N/A"),
+            ("in_eu", all_data.get("in_eu") or "N/A"),
+            ("postal", all_data.get("postal") or all_data.get("zip") or "N/A"),
+            ("latitude", all_data.get("latitude") or all_data.get("lat") or "N/A"),
+            ("longitude", all_data.get("longitude") or all_data.get("lon") or "N/A"),
+            ("timezone", all_data.get("timezone") or "N/A"),
+            ("utc_offset", all_data.get("utc_offset") or "N/A"),
+            ("country_calling_code", all_data.get("country_calling_code") or all_data.get("calling_code") or "N/A"),
+            ("currency", all_data.get("currency") or "N/A"),
+            ("currency_name", all_data.get("currency_name") or "N/A"),
+            ("languages", all_data.get("languages") or "N/A"),
+            ("country_area", all_data.get("country_area") or "N/A"),
+            ("country_population", all_data.get("country_population") or "N/A"),
+            ("asn", all_data.get("asn") or all_data.get("as") or "N/A"),
+            ("org", all_data.get("org") or all_data.get("organisation") or "N/A"),
+            ("success", all_data.get("success") or "N/A"),
+            ("type", all_data.get("type") or "N/A"),
+            ("continent", filter_p(all_data.get("continent") or all_data.get("continent_name")) or "N/A"),
+            ("is_eu", all_data.get("is_eu") or all_data.get("in_eu") or "N/A"),
+            ("calling_code", all_data.get("calling_code") or all_data.get("country_calling_code") or "N/A"),
+            ("capital", all_data.get("capital") or all_data.get("country_capital") or "N/A"),
+            ("borders", all_data.get("borders") or "N/A"),
+            ("flag", all_data.get("flag") or "N/A"),
+            ("connection", all_data.get("connection") or "N/A"),
+            ("hostname", all_data.get("hostname") or "N/A"),
+            ("loc", all_data.get("loc") or "N/A"),
+            ("readme", all_data.get("readme") or "N/A"),
+            ("status", all_data.get("status") or "N/A"),
+            ("district", all_data.get("district") or "N/A"),
+            ("offset", all_data.get("offset") or "N/A"),
+            ("isp", all_data.get("isp") or "N/A"),
+            ("asname", all_data.get("asname") or "N/A"),
+            ("reverse", all_data.get("reverse") or "N/A"),
+            ("mobile", all_data.get("mobile") or "N/A"),
+            ("proxy", all_data.get("proxy") or "N/A"),
+            ("hosting", all_data.get("hosting") or "N/A"),
+            ("connection_type", all_data.get("connection_type") or "N/A"),
+            ("abuse_confidence_score", all_data.get("abuse_confidence_score") or "N/A"),
+            ("usage_type", all_data.get("usage_type") or "N/A"),
+            ("domain", all_data.get("domain") or "N/A"),
+            ("metro_code", all_data.get("metro_code") or "N/A"),
+            ("time_zone", all_data.get("time_zone") or all_data.get("timezone") or "N/A"),
         ]
 
-        for k, v in important:
+        for i, (k, v) in enumerate(important, 1):
             if v is not None:
-                print(f"{Wh}{k:<20}: {Gr}{v}")
+                print(f"{Wh}{i:02}. {k:<18}: {Gr}{v}")
 
         lat = all_data.get("latitude") or all_data.get("lat")
         lon = all_data.get("longitude") or all_data.get("lon")
@@ -432,7 +459,7 @@ def username_osint():
 
 def phone_osint():
     sub_banner("Phone Number OSINT")
-    num = input(f"{Wh}[+] +962xxxx (press Enter to go back): {Gr}").strip()
+    num = input(f"{Wh}[+] +962xxxx  (press Enter to go back): {Gr}").strip()
 
     if not num:
         return
@@ -595,7 +622,7 @@ def fetch_from_source(name, base_url, regex_pat, filename):
 
 def additional_cams_menu():
     while True:
-        sub_banner("Public camera")
+        sub_banner("Public Webcams")
         print(f"{Wh}[1]{Gr} EarthCam")
         print(f"{Wh}[2]{Gr} SkylineWebcams")
         print(f"{Wh}[3]{Gr} Opentopia")
@@ -698,8 +725,8 @@ def main():
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
         print(f"{Wh}[2]{Gr} Device Information")
-        print(f"{Wh}[3]{Gr} Phone Number ")
-        print(f"{Wh}[4]{Gr} Username ")
+        print(f"{Wh}[3]{Gr} Phone Number OSINT")
+        print(f"{Wh}[4]{Gr} Username OSINT")
         print(f"{Wh}[5]{Gr} Cam-hacker")
         print(f"{Wh}[0]{Gr} Exit")
         ch = input(f"\n{Wh}[+] Select : ").strip()
@@ -715,7 +742,7 @@ def main():
         elif ch == "5":
             cam_hacker()
         elif ch == "0":
-            print(f"{Gr} Palestine ")
+            print(f"{Gr}Goodbye! Free Palestine 🇵🇸")
             sys.exit(0)
         else:
             print(f"{Re}[!] Invalid choice")
