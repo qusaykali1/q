@@ -82,10 +82,8 @@ def setup_database():
         except Exception as e:
             print(f"{Re}[!] Connection error during setup: {e}{Wh}")
 
-# استدعاء التحميل قبل أي شيء
 setup_database()
 
-# --- محرك البحث (Sherlock Core) ---
 async def sherlock_check(session, site_name, site_url, username, semaphore):
     async with semaphore:
         url = site_url.format(username=username)
@@ -93,13 +91,11 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             async with session.get(url, headers=HEADERS, timeout=10, allow_redirects=True) as resp:
                 if resp.status == 200:
                     content = await resp.text()
-                    # فحص ذكي للتأكد أن الحساب موجود فعلاً وليس مجرد صفحة خطأ 404
                     if username.lower() in content.lower():
                         return (site_name, url)
+                return None
         except:
-            pass
-        return None
-
+            return None
 async def sherlock_search(username):
     file_path = "data.json"
     if not os.path.exists(file_path):
@@ -826,5 +822,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
