@@ -63,8 +63,6 @@ def banner():
 
 def sub_banner(title=""):
     clear()
- def sub_banner(title=""):
-    clear()
     print(f"""
 {Re}                 .                         .
 {Re}                //                         \\\\
@@ -449,3 +447,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
