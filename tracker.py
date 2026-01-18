@@ -14,7 +14,7 @@ import re
 import uuid
 import asyncio
 import aiohttp
-import webbrowser  # Optional: to open map automatically
+import webbrowser  
 
 try:
     import psutil
@@ -751,3 +751,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
