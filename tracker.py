@@ -490,19 +490,26 @@ def username_osint():
     import asyncio
 
     async def check_username(session, site, url_template, variation, semaphore):
-        import aiohttp
-        async with semaphore:
-            try:
-                url = url_template.format(variation)
-                async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
+     import aiohttp
+     async with semaphore:
+        try:
+            url = url_template.format(variation)
+            async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
+                # تحقق إذا المنصة تعتمد على كود الحالة فقط
+                error_type = data_json.get(site, {}).get("errorType", "")
+                if error_type == "status_code":
                     if r.status in [200, 301, 302]:
-                        text = await r.text()
-                        not_found = ["not found", "404", "doesn't exist", "profile not found"]
-                        if not any(x in text.lower() for x in not_found):
-                            return (site, url)
+                        return (site, url)
                     return None
-            except:
-                return None
+                else:
+                    text = await r.text()
+                    not_found = ["not found", "404", "doesn't exist", "profile not found"]
+                    if not any(x in text.lower() for x in not_found):
+                        return (site, url)
+                    return None
+        except:
+            return None
+
 
     async def username_osint_async(user, data_json):
         import aiohttp
