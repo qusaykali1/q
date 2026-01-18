@@ -84,18 +84,7 @@ def setup_database():
 
 setup_database()
 
-async def sherlock_check(session, site_name, site_url, username, semaphore):
-    async with semaphore:
-        url = site_url.format(username=username)
-        try:
-            async with session.get(url, headers=HEADERS, timeout=10, allow_redirects=True) as resp:
-                if resp.status == 200:
-                    content = await resp.text()
-                    if username.lower() in content.lower():
-                        return (site_name, url)
-                return None
-        except:
-            return None
+
 async def sherlock_search(username):
     file_path = "data.json"
     if not os.path.exists(file_path):
@@ -481,34 +470,9 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
         except:
             return None
 
-def setup_database():
-    file_path = "data.json"
-    url = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock/resources/data.json"
-    
-    if not os.path.exists(file_path):
-        print(f"{Ye}[*] First time setup: Downloading database...{Wh}")
-        try:
-            r = requests.get(url, timeout=20, verify=False) 
-            if r.status_code == 200:
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    f.write(r.text)
-                print(f"{Gr}[+] Database ready!{Wh}")
-            else:
-                print(f"{Re}[!] Server returned error {r.status_code}{Wh}")
-        except Exception as e:
-            print(f"{Re}[!] Download failed: {e}{Wh}")
 
-setup_database()
 
-async def sherlock_search(username):
-    file_path = "data.json"
-    if not os.path.exists(file_path):
-        return []
-        
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
 
-    return [] 
 
 def username_osint():
     sub_banner("USERNAME OSINT")
@@ -822,6 +786,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
