@@ -121,13 +121,13 @@ def clear():
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                     
-  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
-  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
-  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
-  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
-  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
-  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
+                                                                                      
+  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
+  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
+  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
+  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
+  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
+  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -457,14 +457,12 @@ def IP_Track():
 async def sherlock_check(session, site_name, site_url, username, semaphore):
     async with semaphore:
         try:
-            url = site_url.format(username=username)
-            async with session.head(url, allow_redirects=True, timeout=5) as resp:
+            url = site_url.replace("{}", username)
+            async with session.get(url, allow_redirects=True, timeout=8) as resp:
                 if resp.status == 200:
                     final_url = str(resp.url)
-                    # رفض الصفحات اللي بترجع لتسجيل دخول أو صفحة رئيسية
                     if any(x in final_url.lower() for x in ["login", "signup", "join", "register", "auth"]):
                         return None
-                    # نجاح حقيقي
                     return (site_name, url)
                 return None
         except:
