@@ -13,6 +13,7 @@ import re
 import uuid
 import asyncio
 import aiohttp
+import webbrowser  
 
 try:
     import psutil
@@ -27,7 +28,6 @@ except ImportError:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# Colors
 Bl = '\033[30m'
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
@@ -50,13 +50,13 @@ def clear():
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                     
-  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
-  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
-  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
-  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
-  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
-  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
+                                                                                      
+  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
+  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
+  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
+  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
+  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
+  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -77,12 +77,12 @@ def sub_banner(title=""):
 {Re}                \\\\    {Wh}'--------------' {Re}    //
 {Re}                 '                          '
 {Wh}          ________________________________________
-{Wh}         | {Cy}  version {Wh}: {Re}1.0 {Wh}                    |
+{Wh}         | {Cy}  version {Wh}: {Re}1.1 {Wh}                    |
 {Wh}         | {Wh}------------------------------------{Wh}|
 {Wh}         | {Gr}  AUTHOR: {Wh}Qusay_kali                {Wh}|
 {Wh}         | {Gr}  MODULE: {Wh}CYBER SECURITY            {Wh}|
 {Wh}         |_____________________________________|
-    """)
+    """.format(title=title))
 
 def filter_p(val):
     bad = ["Israel", "IL", "israel"]
@@ -97,144 +97,266 @@ def get_mac():
     except:
         return "Unknown"
 
+def get_country_info(country_name):
+    """Fetch additional country info from REST Countries API and World Bank"""
+    country_info = {}
+    try:
+        if country_name == FREE_PAL or "Palestine" in str(country_name):
+            country_info = {
+                "Official Name": "State of Palestine",
+                "Capital": "Jerusalem",
+                "Timezone GMT": "UTC+02:00 (Palestine Standard Time)",
+                "Flag Description": "Three horizontal stripes (black, white, green) with a red triangle on the hoist side",
+                "Flag URL": "https://flagcdn.com/ps.svg",
+                "Location on Map": "Middle East, bordering the Mediterranean Sea, between Egypt and Israel (occupied territories)",
+                "Favorite Food": "Maqluba (upside-down rice and vegetable dish)",
+                "Currency": "Israeli New Shekel (ILS)",
+                "GDP (Latest)": "N/A (Disputed)",
+                "Main Industries": "Agriculture, tourism, small-scale manufacturing",
+                "Population": "Approximately 5.4 million",
+                "Area": "6,020 sq km",
+                "Languages": "Arabic",
+                "Calling Code": "+970",
+                "Internet TLD": ".ps",
+                "Driving Side": "Right",
+                "Borders": "Egypt, Jordan, Israel (occupied)",
+                "Continent": "Asia",
+                "Subregion": "Western Asia",
+                "Demonym": "Palestinian",
+                "Independence Day": "November 15 (Declaration)",
+                "Government Type": "Semi-presidential republic",
+                "President": "Mahmoud Abbas",
+                "Prime Minister": "Mohammad Shtayyeh",
+                "Currency Symbol": "₪",
+                "Life Expectancy": "73 years",
+                "Literacy Rate": "97%",
+                "Main Exports": "Stone, olives, fruit",
+                "Main Imports": "Food, consumer goods, construction materials",
+                "Climate": "Mediterranean",
+                "Highest Point": "Mount Nabi Yunis (1,030 m)",
+                "Lowest Point": "Dead Sea (-408 m)",
+                "National Animal": "Palestinian mountain gazelle",
+                "National Anthem": "Fida'i",
+                "FIFA Code": "PLE",
+                "IOC Code": "PLE",
+                "ISO Code": "PS",
+                "UN Member": "No (observer state)",
+                "WHO Region": "Eastern Mediterranean",
+            }
+            return country_info
+
+        url = f"https://restcountries.com/v3.1/name/{country_name}?fullText=true"
+        resp = requests.get(url, headers=HEADERS, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()[0] if resp.json() else {}
+            official_name = data.get("name", {}).get("official", country_name)
+            capital = data.get("capital", ["N/A"])[0]
+            timezones = ", ".join(data.get("timezones", ["N/A"]))
+            flag_desc = data.get("flags", {}).get("alt", "N/A")
+            flag_url = data.get("flags", {}).get("png", "N/A")
+            region = data.get("region", "N/A")
+            subregion = data.get("subregion", "N/A")
+            location = f"{region}, {subregion}"
+            currencies = data.get("currencies", {})
+            currency_code = list(currencies.keys())[0] if currencies else "N/A"
+            currency_name = currencies.get(currency_code, {}).get("name", "N/A") if currency_code else "N/A"
+            currency_symbol = currencies.get(currency_code, {}).get("symbol", "N/A") if currency_code else "N/A"
+            languages = ", ".join(data.get("languages", {}).values())
+            population = f"{data.get('population', 'N/A'):,}"
+            area = f"{data.get('area', 'N/A'):,} sq km"
+            calling_code = data.get("idd", {}).get("root", "") + "".join(data.get("idd", {}).get("suffixes", ["N/A"]))
+            tld = ", ".join(data.get("tld", ["N/A"]))
+            driving_side = data.get("car", {}).get("side", "N/A")
+            borders = ", ".join(data.get("borders", ["N/A"]))
+            continent = data.get("continents", ["N/A"])[0]
+            demonym = data.get("demonyms", {}).get("eng", {}).get("m", "N/A")
+            un_member = "Yes" if data.get("unMember") else "No"
+            independent = "Yes" if data.get("independent") else "No"
+            start_of_week = data.get("startOfWeek", "N/A")
+            latlng = data.get("latlng", ["N/A", "N/A"])
+            highest_point = "N/A"  
+            lowest_point = "N/A"   
+            fifa = data.get("fifa", "N/A")
+            ioc = "N/A"  
+
+            favorite_foods = {
+                "Jordan": "Mansaf ",
+                "United States": "Hamburger",
+                "France": "Croissant",
+                "Italy": "Pizza",
+                "India": "Biryani",
+                "Japan": "Sushi",
+                "Mexico": "Tacos",
+                "China": "Dumplings",
+                "Germany": "Sausage (Wurst)",
+                "Brazil": "Feijoada",
+            }
+            favorite_food = favorite_foods.get(country_name, "Varies by region")
+
+            gdp = "N/A"
+            country_code = data.get("cca2", "")
+            if country_code:
+                wb_url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/NY.GDP.MKTP.CD?date=2022&format=json"
+                wb_resp = requests.get(wb_url, headers=HEADERS, timeout=10)
+                if wb_resp.status_code == 200:
+                    wb_data = wb_resp.json()
+                    if wb_data and len(wb_data) > 1 and wb_data[1]:
+                        gdp_value = wb_data[1][0].get('value')
+                        gdp = f"${gdp_value:,.0f} USD" if gdp_value else "N/A"
+
+            pop_growth = "N/A"
+            if country_code:
+                pop_growth_url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/SP.POP.GROW?date=2022&format=json"
+                pg_resp = requests.get(pop_growth_url, headers=HEADERS, timeout=10)
+                if pg_resp.status_code == 200:
+                    pg_data = pg_resp.json()
+                    if pg_data and len(pg_data) > 1 and pg_data[1]:
+                        pop_growth = f"{pg_data[1][0].get('value', 'N/A')}%"
+
+            life_exp = "N/A"
+            if country_code:
+                life_url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/SP.DYN.LE00.IN?date=2022&format=json"
+                life_resp = requests.get(life_url, headers=HEADERS, timeout=10)
+                if life_resp.status_code == 200:
+                    life_data = life_resp.json()
+                    if life_data and len(life_data) > 1 and life_data[1]:
+                        life_exp = f"{life_data[1][0].get('value', 'N/A')} years"
+
+            literacy = "N/A"
+            if country_code:
+                lit_url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/SE.ADT.LITR.ZS?date=2022&format=json"
+                lit_resp = requests.get(lit_url, headers=HEADERS, timeout=10)
+                if lit_resp.status_code == 200:
+                    lit_data = lit_resp.json()
+                    if lit_data and len(lit_data) > 1 and lit_data[1]:
+                        literacy = f"{lit_data[1][0].get('value', 'N/A')}%"
+
+            country_info = {
+                "Official Name": official_name,
+                "Capital": capital,
+                "Timezone GMT": timezones,
+                "Flag Description": flag_desc,
+                "Flag URL": flag_url,
+                "Location on Map": location,
+                "Favorite Food": favorite_food,
+                "Currency": f"{currency_name} ({currency_code})",
+                "Currency Symbol": currency_symbol,
+                "GDP (2022)": gdp,
+                "Population": population,
+                "Population Growth (2022)": pop_growth,
+                "Area": area,
+                "Languages": languages,
+                "Calling Code": calling_code,
+                "Internet TLD": tld,
+                "Driving Side": driving_side.capitalize(),
+                "Borders": borders,
+                "Continent": continent,
+                "Subregion": subregion,
+                "Demonym": demonym,
+                "UN Member": un_member,
+                "Independent": independent,
+                "Start of Week": start_of_week.capitalize(),
+                "Latitude (approx)": latlng[0],
+                "Longitude (approx)": latlng[1],
+                "Life Expectancy": life_exp,
+                "Literacy Rate": literacy,
+                "FIFA Code": fifa,
+                "Highest Point": highest_point,
+                "Lowest Point": lowest_point,
+            }
+    except Exception as e:
+        print(f"{Re}Error fetching country info: {e}{Wh}")
+    return country_info
+
 def IP_Track():
-    sub_banner("IP TRACKER ")
-    ip = input(f"{Wh}[+] Target IP : {Gr}").strip()
-   
-    apis = [
-        f"http://ip-api.com/json/{ip}",
-        f"https://ipapi.co/{ip}/json/",
-        f"https://ipwho.is/{ip}",
-        f"https://ipinfo.io/{ip}/json"
-    ]
-   
-    all_data = {}
-    for api in apis:
-        try:
-            r = requests.get(api, headers=HEADERS, timeout=8).json()
-            if isinstance(r, dict) and r.get("status") != "fail":
-                all_data.update(r)
-        except:
-            pass
-   
-    if all_data:
-        print(f"\n{Wh}========== DETAILED IP INFORMATION (MERGED) ==========\n")
-        for i, (k, v) in enumerate(all_data.items(), 1):
-            if i > 50: break
-            v = filter_p(v)
-            print(f"{Wh}{i:02}. {k:<20}:{Gr} {v}")
-        if "lat" in all_data and "lon" in all_data:
-            print(f"{Wh}Google Maps:{Gr} https://www.google.com/maps?q={all_data['lat']},{all_data['lon']}")
-    else:
-        print(f"{Re}[!] No IP data found")
+    while True:
+        sub_banner("IP TRACKER")
+        print(f"{Wh}[+] Target IP (press Enter to go back): {Gr}", end="")
+        ip = input().strip()
 
-def device_info():
-    sub_banner("Device Information ")
-    host = socket.gethostname()
-    address_full = "N/A"
-    try:
-        geo_r = requests.get("https://ipwho.is/", timeout=10).json()
-        if geo_r.get("success"):
-            pub_ip = geo_r.get("ip")
-            lat = geo_r.get("latitude")
-            lon = geo_r.get("longitude")
-            city = geo_r.get("city")
-            country = filter_p(geo_r.get("country"))
-            maps_link = f"https://www.google.com/maps?q={lat},{lon}"
-          
-            if Nominatim:
-                try:
-                    geolocator = Nominatim(user_agent="Qusay_kali_Audit")
-                    location = geolocator.reverse(f"{lat}, {lon}")
-                    address_full = filter_p(location.address) if location else "Not Found"
-                except:
-                    address_full = "Geopy Service Timeout"
-        else:
-            pub_ip = requests.get("https://api.ipify.org", timeout=5).text
-            lat = lon = city = country = maps_link = "N/A"
-    except:
-        pub_ip = "Offline"
-        lat = lon = city = country = maps_link = "Error"
-    mem = psutil.virtual_memory() if psutil else None
-    disk = psutil.disk_usage("/") if psutil else None
-    mac_addr = get_mac()
-    info = [
-        ("Hostname", host),
-        ("MAC Address", mac_addr),
-        ("Public IP", pub_ip),
-        ("Local IP", socket.gethostbyname(host)),
-        ("Country", country),
-        ("City", city),
-        ("Latitude", lat),
-        ("Longitude", lon),
-        ("Full Address", address_full),
-        ("Maps Link", maps_link),
-        ("OS", platform.system()),
-        ("OS Release", platform.release()),
-        ("OS Version", platform.version()),
-        ("Architecture", platform.machine()),
-        ("Processor", platform.processor()),
-        ("CPU Cores", psutil.cpu_count() if psutil else "N/A"),
-        ("RAM Total", f"{round(mem.total/1e9,2)} GB" if mem else "N/A"),
-        ("RAM Usage", f"{mem.percent}%" if mem else "N/A"),
-        ("Disk Total", f"{round(disk.total/1e9,2)} GB" if disk else "N/A"),
-        ("Disk Usage", f"{disk.percent}%" if disk else "N/A"),
-        ("Boot Time", datetime.datetime.fromtimestamp(psutil.boot_time()) if psutil else "N/A"),
-        ("Python Version", platform.python_version()),
-        ("User", os.getenv("USER") or os.getenv("USERNAME")),
-        ("Working Dir", os.getcwd()),
-        ("Timezone", time.tzname),
-        ("Battery", f"{psutil.sensors_battery().percent}%" if psutil and psutil.sensors_battery() else "N/A"),
-        ("Uptime", f"{round((time.time()-psutil.boot_time())/3600, 2)} Hours" if psutil else "N/A"),
-        ("Network Status", "Online" if pub_ip != "Offline" else "Offline"),
-        ("Security Mode", "OSINT"),
-        ("Final Check", "CLEAN")
-    ]
-    print(f"\n{Wh}========== DEVICE & LOCATION INFO ==========\n")
-    for i, (k, v) in enumerate(info, 1):
-        print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
-
-def phone_osint():
-    sub_banner("Phone Number")
-    num = input(f"{Wh}[+] Phone (+962xxxxxx): {Gr}").strip()
-  
-    if not num.startswith('+'): num = '+' + num
-  
-    try:
-        p = phonenumbers.parse(num, None)
-        if not phonenumbers.is_possible_number(p) and not num.startswith('+972'):
-            print(f"{Re}[!] Invalid Phone Number")
+        if not ip:
             return
-    except:
-        print(f"{Re}[!] Parsing Error"); return
-    carrier_name = carrier.name_for_number(p, "en") or "Unknown"
-    region_name = filter_p(geocoder.description_for_number(p, "en"))
-    country_name = filter_p(geocoder.country_name_for_number(p, "en"))
-  
-    if num.startswith('+972'):
-        country_name = "Palestine"
-        region_name = f"{Gr}Occupied Palestine{Wh}"
-    tz = timezone.time_zones_for_number(p)
-    ntype = phonenumbers.number_type(p)
-    line_type = "Unknown"
-    if ntype == 1: line_type = "Mobile"
-    elif ntype == 0: line_type = "Fixed Line"
-    result = [
-        ("Country", country_name),
-        ("Region/City", region_name),
-        ("Carrier", carrier_name),
-        ("Line Type", line_type),
-        ("Timezone", list(tz)),
-        ("Valid Number", phonenumbers.is_valid_number(p)),
-        ("Possible", phonenumbers.is_possible_number(p)),
-        ("E164 Format", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.E164)),
-        ("International", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.INTERNATIONAL)),
-        ("National", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.NATIONAL)),
-        ("RFC3966", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.RFC3966))
-    ]
-    print(f"\n{Wh}====== ADVANCED PHONE ANALYSIS ======\n")
-    for i, (k, v) in enumerate(result, 1):
-        print(f"{Wh}{i:02}. {k:<18}:{Gr} {v}")
+
+        apis = [
+            f"http://ip-api.com/json/{ip}",
+            f"https://ipapi.co/{ip}/json/",
+            f"https://ipwho.is/{ip}",
+            f"https://ipinfo.io/{ip}/json",
+            f"https://freegeoip.app/json/{ip}",
+            f"https://api.db-ip.com/v2/free/{ip}",
+        ]
+
+        all_data = {}
+        for api in apis:
+            try:
+                r = requests.get(api, headers=HEADERS, timeout=9).json()
+                if isinstance(r, dict) and r.get("status") != "fail" and r.get("message") != "reserved range":
+                    all_data.update(r)
+            except:
+                pass
+
+        if not all_data:
+            print(f"{Re}[!] No information found for this IP")
+            input(f"{Wh}Press Enter to try again...")
+            continue
+
+        print(f"\n{Wh}========== IP INFORMATION ==========\n")
+
+        important = [
+            ("IP", all_data.get("query") or all_data.get("ip") or all_data.get("addr")),
+            ("Status", all_data.get("status")),
+            ("Continent", filter_p(all_data.get("continent") or all_data.get("continent_name"))),
+            ("Continent Code", all_data.get("continentCode") or all_data.get("continent_code")),
+            ("Country", filter_p(all_data.get("country") or all_data.get("country_name"))),
+            ("Country Code", all_data.get("countryCode") or all_data.get("country_code")),
+            ("Region", all_data.get("regionName") or all_data.get("region")),
+            ("Region Code", all_data.get("region") or all_data.get("region_code")),
+            ("District", all_data.get("district")),
+            ("City", all_data.get("city")),
+            ("ZIP", all_data.get("zip") or all_data.get("postal")),
+            ("Latitude", all_data.get("latitude") or all_data.get("lat")),
+            ("Longitude", all_data.get("longitude") or all_data.get("lon")),
+            ("Timezone", all_data.get("timezone")),
+            ("Offset", all_data.get("offset")),
+            ("Currency", all_data.get("currency")),
+            ("ISP", all_data.get("isp")),
+            ("Organization", all_data.get("org") or all_data.get("organisation")),
+            ("AS", all_data.get("as") or all_data.get("asn")),
+            ("AS Name", all_data.get("asname")),
+            ("Reverse DNS", all_data.get("reverse")),
+            ("Mobile", all_data.get("mobile")),
+            ("Proxy", all_data.get("proxy")),
+            ("Hosting", all_data.get("hosting")),
+            ("Type", all_data.get("type")),
+            ("Connection Type", all_data.get("connection_type")),
+            ("Abuse Confidence", all_data.get("abuse_confidence_score")),  # From db-ip if available
+            ("Usage Type", all_data.get("usage_type")),
+            ("Domain", all_data.get("domain")),
+        ]
+
+        for k, v in important:
+            if v is not None:
+                print(f"{Wh}{k:<20}: {Gr}{v}")
+
+        lat = all_data.get("latitude") or all_data.get("lat")
+        lon = all_data.get("longitude") or all_data.get("lon")
+
+        if lat is not None and lon is not None:
+            print(f"\n{Wh}━━━━━━━━━━ MAP LINKS ━━━━━━━━━━")
+            print(f"{Gr}Google Maps          : {Wh}https://www.google.com/maps?q={lat},{lon}")
+            print(f"{Gr}Google Earth         : {Wh}https://earth.google.com/web/@{lat},{lon},1000a,500d,35y,0h,0t,0r")
+            print(f"{Gr}Google Street View   : {Wh}https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={lat},{lon}")
+            print(f"{Gr}OpenStreetMap        : {Wh}https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=15/{lat}/{lon}")
+        else:
+            print(f"\n{Re}No coordinates (lat/lon) available for this IP")
+
+        country = filter_p(all_data.get("country") or all_data.get("country_name", "N/A"))
+        print(f"\n{Wh}━━━━━━━━━━ COUNTRY DETAILS ━━━━━━━━━━")
+        details = get_country_info(country)
+        for k, v in details.items():
+            print(f"{Wh}{k:<20}: {Gr}{v}")
+
+        input(f"{Wh}\nPress Enter to continue...")
 
 async def check_username(session, name, url_template, var, semaphore):
     async with semaphore:
@@ -244,8 +366,8 @@ async def check_username(session, name, url_template, var, semaphore):
                 if r.status in [200, 301, 302]:
                     content = await r.text()
                     content_lower = content.lower()
-                    not_found_keywords = ["not found", "page not found", "404", "doesn't exist", "user not found", "profile not found"]
-                    if not any(keyword in content_lower for keyword in not_found_keywords):
+                    not_found = ["not found", "page not found", "404", "doesn't exist", "user not found", "profile not found"]
+                    if not any(kw in content_lower for kw in not_found):
                         return (name, var, url, True)
                 return (name, var, url, False)
         except:
@@ -261,8 +383,11 @@ async def username_osint_async(user, platforms, variations):
 
 def username_osint():
     sub_banner("USERNAME OSINT")
-    user = input(f"{Wh}[+] Username : {Gr}").strip()
-  
+    user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
+
+    if not user:
+        return
+
     platforms = [
         ("Facebook", "https://facebook.com/{}"),
         ("Instagram", "https://instagram.com/{}"),
@@ -286,20 +411,167 @@ def username_osint():
         ("About.me", "https://about.me/{}"),
         ("Steam", "https://steamcommunity.com/id/{}"),
         ("Spotify", "https://open.spotify.com/user/{}"),
-        ("Pinterest", "https://www.pinterest.com/{}")
     ]
     variations = [user, user.capitalize(), user.lower(), user.upper()]
-    for i in ['1']:
+    for i in ['1', '69', 'x', '_', '.']:
         variations += [i + var for var in variations] + [var + i for var in variations]
     variations = list(set(variations))
-    print(f"\n{Wh}[*] Searching for {Ye}{user} on {len(platforms)} platforms...\n")
+
+    print(f"\n{Wh}[*] Searching {Ye}{user}{Wh} across {len(platforms)} platforms...\n")
+
     found = asyncio.run(username_osint_async(user, platforms, variations))
+
     if found:
-        print(f"{Gr}======= FOUND PROFILES =======\n")
+        print(f"{Gr}======= FOUND ACCOUNTS =======\n")
         for name, var, url, _ in found:
-            print(f"{Gr}[FOUND]{Wh} {name:<15} ({var}) -> {url}")
+            print(f"{Gr}[FOUND]{Wh} {name:<15} ({var}) → {url}")
     else:
-        print(f"{Re}[!] No profiles found")
+        print(f"{Re}[!] No accounts found")
+
+    input(f"{Wh}\nPress Enter to continue...")
+
+def phone_osint():
+    sub_banner("Phone Number OSINT")
+    num = input(f"{Wh}[+] +962xxxx (press Enter to go back): {Gr}").strip()
+
+    if not num:
+        return
+
+    if not num.startswith('+'):
+        num = '+' + num
+
+    try:
+        p = phonenumbers.parse(num, None)
+        if not phonenumbers.is_possible_number(p):
+            print(f"{Re}[!] Invalid phone number format")
+            return
+    except:
+        print(f"{Re}[!] Phone number parsing error")
+        return
+
+    carrier_name = carrier.name_for_number(p, "en") or "Unknown"
+    region_name = filter_p(geocoder.description_for_number(p, "en"))
+    country_name = filter_p(geocoder.country_name_for_number(p, "en"))
+
+    if num.startswith('+972'):
+        country_name = "Palestine"
+        region_name = f"{Gr}Occupied Palestine{Wh}"
+
+    tz = timezone.time_zones_for_number(p)
+    ntype = phonenumbers.number_type(p)
+    line_type = "Unknown"
+    if ntype == phonenumbers.PhoneNumberType.MOBILE:
+        line_type = "Mobile"
+    elif ntype == phonenumbers.PhoneNumberType.FIXED_LINE:
+        line_type = "Fixed Line"
+    elif ntype == phonenumbers.PhoneNumberType.FIXED_LINE_OR_MOBILE:
+        line_type = "Fixed Line or Mobile"
+    elif ntype == phonenumbers.PhoneNumberType.TOLL_FREE:
+        line_type = "Toll Free"
+    elif ntype == phonenumbers.PhoneNumberType.PREMIUM_RATE:
+        line_type = "Premium Rate"
+    elif ntype == phonenumbers.PhoneNumberType.SHARED_COST:
+        line_type = "Shared Cost"
+    elif ntype == phonenumbers.PhoneNumberType.VOIP:
+        line_type = "VoIP"
+    elif ntype == phonenumbers.PhoneNumberType.PERSONAL_NUMBER:
+        line_type = "Personal Number"
+    elif ntype == phonenumbers.PhoneNumberType.PAGER:
+        line_type = "Pager"
+    elif ntype == phonenumbers.PhoneNumberType.UAN:
+        line_type = "UAN"
+    elif ntype == phonenumbers.PhoneNumberType.VOICEMAIL:
+        line_type = "Voicemail"
+    elif ntype == phonenumbers.PhoneNumberType.UNKNOWN:
+        line_type = "Unknown"
+
+    result = [
+        ("Country", country_name),
+        ("Region/City", region_name),
+        ("Carrier", carrier_name),
+        ("Line Type", line_type),
+        ("Timezone", list(tz)),
+        ("Valid", phonenumbers.is_valid_number(p)),
+        ("Possible", phonenumbers.is_possible_number(p)),
+        ("E164", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.E164)),
+        ("International", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.INTERNATIONAL)),
+        ("National", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.NATIONAL)),
+        ("RFC3966", phonenumbers.format_number(p, phonenumbers.PhoneNumberFormat.RFC3966)),
+        ("Number Type Code", ntype),
+    ]
+
+    print(f"\n{Wh}====== PHONE NUMBER ANALYSIS ======\n")
+    for i, (k, v) in enumerate(result, 1):
+        print(f"{Wh}{i:02}. {k:<20}: {Gr}{v}")
+
+    print(f"\n{Wh}━━━━━━━━━━ COUNTRY DETAILS ━━━━━━━━━━")
+    details = get_country_info(country_name)
+    for k, v in details.items():
+        print(f"{Wh}{k:<20}: {Gr}{v}")
+
+    input(f"{Wh}\nPress Enter to continue...")
+
+def device_info():
+    sub_banner("Device Information")
+    host = socket.gethostname()
+    address_full = "N/A"
+
+    try:
+        geo_r = requests.get("https://ipwho.is/", timeout=10).json()
+        if geo_r.get("success", False):
+            pub_ip = geo_r.get("ip")
+            lat = geo_r.get("latitude")
+            lon = geo_r.get("longitude")
+            city = geo_r.get("city")
+            country = filter_p(geo_r.get("country"))
+            maps_link = f"https://www.google.com/maps?q={lat},{lon}" if lat and lon else "N/A"
+
+            if Nominatim:
+                try:
+                    geolocator = Nominatim(user_agent="Qusay_kali_tool")
+                    location = geolocator.reverse(f"{lat}, {lon}", timeout=10)
+                    address_full = filter_p(location.address) if location else "Not available"
+                except:
+                    address_full = "Geocoding timeout"
+        else:
+            pub_ip = "N/A"
+            lat = lon = city = country = maps_link = "N/A"
+    except:
+        pub_ip = "Offline / Error"
+        lat = lon = city = country = maps_link = "N/A"
+
+    mem = psutil.virtual_memory() if psutil else None
+    disk = psutil.disk_usage("/") if psutil else None
+    mac_addr = get_mac()
+
+    info = [
+        ("Hostname", host),
+        ("MAC Address", mac_addr),
+        ("Public IP", pub_ip),
+        ("Local IP", socket.gethostbyname(host)),
+        ("Country", country),
+        ("City", city),
+        ("Latitude", lat),
+        ("Longitude", lon),
+        ("Maps Link", maps_link),
+        ("Full Address", address_full),
+        ("OS", platform.system()),
+        ("OS Release", platform.release()),
+        ("OS Version", platform.version()),
+        ("Architecture", platform.machine()),
+        ("Processor", platform.processor()),
+        ("CPU Cores", psutil.cpu_count() if psutil else "N/A"),
+        ("RAM Total", f"{round(mem.total/1e9,2)} GB" if mem else "N/A"),
+        ("RAM Usage", f"{mem.percent}%" if mem else "N/A"),
+        ("Disk Total", f"{round(disk.total/1e9,2)} GB" if disk else "N/A"),
+        ("Disk Usage", f"{disk.percent}%" if disk else "N/A"),
+    ]
+
+    print(f"\n{Wh}========== DEVICE & LOCATION INFO ==========\n")
+    for i, (k, v) in enumerate(info, 1):
+        print(f"{Wh}{i:02}. {k:<18}: {Gr}{v}")
+
+    input(f"{Wh}\nPress Enter to continue...")
 
 def fetch_from_source(name, base_url, regex_pat, filename):
     print(f"{Ye}[+] Fetching from {name} ...{Wh}")
@@ -314,19 +586,19 @@ def fetch_from_source(name, base_url, regex_pat, filename):
                 for link in links:
                     print(f"{Gr}{link}{Wh}")
                     f.write(link + '\n')
-            print(f"{Gr}Saved {len(links)} links from {name} to {filename}{Wh}")
+            print(f"{Gr}Saved {len(links)} links to {filename}{Wh}")
         else:
             print(f"{Re}No useful links found from {name}{Wh}")
     except Exception as e:
-        print(f"{Re}Error fetching {name}: {e}{Wh}")
+        print(f"{Re}Error from {name}: {e}{Wh}")
     return links
 
 def additional_cams_menu():
     while True:
-        sub_banner(" Public Cam ")
+        sub_banner("Public camera")
         print(f"{Wh}[1]{Gr} EarthCam")
-        print(f"{Wh}[2]{Gr} SkylineWebcams ")
-        print(f"{Wh}[3]{Gr} Opentopia ")
+        print(f"{Wh}[2]{Gr} SkylineWebcams")
+        print(f"{Wh}[3]{Gr} Opentopia")
         print(f"{Wh}[0]{Gr} Back / Exit")
         choice = input(f"\n{Wh}[+] Select source (1-3 or 0): {Gr}").strip()
 
@@ -345,11 +617,10 @@ def additional_cams_menu():
             fetch_from_source(name, url, regex, filename)
             input(f"{Wh}Press Enter to continue...")
         else:
-            print(f"{Re}[!] Invalid choice{Wh}")
+            print(f"{Re}[!] Invalid choice")
 
 def cam_hacker():
-    sub_banner(" Cam Hacker ")
-   
+    sub_banner("Cam Hacker")
     try:
         import colorama
         colorama.init()
@@ -358,64 +629,68 @@ def cam_hacker():
         return
 
     url = "http://www.insecam.org/en/jsoncountries/"
+    countries = {}
     try:
         resp = requests.get(url, headers=HEADERS, timeout=10)
         data = resp.json()
         countries = data.get('countries', {})
     except Exception as e:
-        print(f"{Re}Error fetching countries from Insecam: {e}{Wh}")
-        print(f"{Ye}Press n to skip Insecam and go to other sources{Wh}")
-        country_input = input(f"\n{Ye}Enter Country Code (##) or n to skip: {Gr}").upper().strip()
-        if country_input in ["N", "n"]:
-            additional_cams_menu()
-            return
-        country = country_input
-    else:
+        print(f"{Re}Failed to load Insecam countries: {e}")
+
+    if countries:
         ordered = {}
         if "IL" in countries:
             ordered["PS"] = {"country": "Palestine", "count": countries["IL"]["count"]}
             del countries["IL"]
         ordered.update(countries)
 
-        print(f"{Wh}Available Countries / Cameras count:\n")
-        for key, value in ordered.items():
-            print(f"{Gr}Code: ({key}) - {value['country']} / ({value['count']} cameras){Wh}")
+        print(f"\n{Wh}Available countries / camera count:\n")
+        for code, info in ordered.items():
+            print(f"{Gr}{code:<4} {info['country']:<25} ({info['count']} cams)")
 
-        country_input = input(f"\n{Ye}Enter Country Code (##) or n to skip Insecam: {Gr}").upper().strip()
-
-        if country_input in ["N", "n"]:
+        country = input(f"\n{Ye}Enter country code (or 'n' to skip Insecam): {Gr}").upper().strip()
+        if country.lower() == 'n':
             additional_cams_menu()
             return
-        country = country_input
+    else:
+        country = input(f"\n{Ye}Enter country code (or 'n' to skip Insecam): {Gr}").upper().strip()
+        if country.lower() == 'n':
+            additional_cams_menu()
+            return
 
     if not country:
-        print(f"{Re}No code entered.{Wh}")
+        print(f"{Re}No code entered.")
         return
 
-    print(f"{Gr}Fetching cameras from Insecam for {country} ...{Wh}\n")
-    all_links = []
+    print(f"{Gr}Fetching Insecam cameras for {country} ...{Wh}\n")
     filename = f"{country}_insecam_cams.txt"
+    count = 0
+    all_links = []
+
     try:
         res = requests.get(f"http://www.insecam.org/en/bycountry/{country}", headers=HEADERS, timeout=10)
         pages = re.findall(r'pagenavigator\("\?page=",\s*(\d+)', res.text)
         last_page = int(pages[0]) if pages else 1
 
         with open(filename, 'w', encoding='utf-8') as f:
-            count = 0
             for page in range(last_page):
-                res = requests.get(f"http://www.insecam.org/en/bycountry/{country}/?page={page}", headers=HEADERS, timeout=10)
-                find_ip = re.findall(r'http://\d{1,3}(?:\.\d{1,3}){3}:\d+', res.text)
-                for ip in find_ip:
-                    print(f"{Gr}{ip}{Wh}")
-                    f.write(ip + '\n')
-                    all_links.append(ip)
-                    count += 1
-        print(f"\n{Gr}Done! Saved {count} Insecam cameras to: {filename}{Wh}")
+                try:
+                    url = f"http://www.insecam.org/en/bycountry/{country}/?page={page}"
+                    res = requests.get(url, headers=HEADERS, timeout=10)
+                    ips = re.findall(r'http://\d{1,3}(?:\.\d{1,3}){3}:\d+', res.text)
+                    for ip in ips:
+                        print(f"{Gr}{ip}{Wh}")
+                        f.write(ip + '\n')
+                        all_links.append(ip)
+                        count += 1
+                except:
+                    continue
+        print(f"\n{Gr}Done! Saved {count} cameras to: {filename}{Wh}")
     except Exception as e:
-        print(f"{Re}Insecam error: {e}{Wh}")
+        print(f"{Re}Insecam fetch error: {e}{Wh}")
 
-    add_more = input(f"\n{Ye}Do you want to add cameras from other public sites? (y/1 for yes): {Gr}").strip().lower()
-    if add_more in ["y", "1", "yes"]:
+    more = input(f"\n{Ye}Check other public webcam sites? (y/n): {Gr}").lower()
+    if more in ['y', 'yes', '1']:
         additional_cams_menu()
 
 def main():
@@ -423,11 +698,12 @@ def main():
         banner()
         print(f"{Wh}[1]{Gr} IP Tracker")
         print(f"{Wh}[2]{Gr} Device Information")
-        print(f"{Wh}[3]{Gr} Phone Number OSINT")
-        print(f"{Wh}[4]{Gr} Username OSINT")
+        print(f"{Wh}[3]{Gr} Phone Number ")
+        print(f"{Wh}[4]{Gr} Username ")
         print(f"{Wh}[5]{Gr} Cam-hacker")
         print(f"{Wh}[0]{Gr} Exit")
         ch = input(f"\n{Wh}[+] Select : ").strip()
+
         if ch == "1":
             IP_Track()
         elif ch == "2":
@@ -439,12 +715,12 @@ def main():
         elif ch == "5":
             cam_hacker()
         elif ch == "0":
-            print(f"{Gr}Goodbye! Free Palestine 🇵🇸")
+            print(f"{Gr} Palestine ")
             sys.exit(0)
         else:
             print(f"{Re}[!] Invalid choice")
-        input(f"{Wh}\nPress Enter to return...")
+
+        input(f"{Wh}\nPress Enter to continue...")
 
 if __name__ == "__main__":
     main()
-
