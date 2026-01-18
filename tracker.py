@@ -558,7 +558,7 @@ def username_osint():
 
 def phone_osint():
     sub_banner("Phone Number OSINT")
-    num = input(f"{Wh}[+] Phone number (press Enter to go back): {Gr}").strip()
+    num = input(f"{Wh}[+] +962xxx (press Enter to go back): {Gr}").strip()
 
     if not num:
         return
@@ -850,5 +850,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
