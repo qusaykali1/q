@@ -21,15 +21,11 @@ import sys
 
 def install_requirements():
     try:
-        # يحاول تثبيت المكتبات الموجودة في الملف مع الأمر الخاص بكالي
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "--break-system-packages"])
     except Exception as e:
-        pass # إذا كانت مثبتة مسبقاً سيكمل البرنامج
-
-# استدعاء الدالة في بداية التشغيل
+        pass 
 install_requirements()
 
-# تعطيل تحذيرات SSL المزعجة
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 try:
@@ -45,7 +41,6 @@ except ImportError:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# الألوان
 Bl = '\033[30m'
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
@@ -62,16 +57,13 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 }
 
-# --- دالة التجهيز التلقائي لقاعدة البيانات ---
 def setup_database():
     file_path = "data.json"
     url = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock/resources/data.json"
     
-    # إذا الملف مش موجود أو حجمه صغير جداً (خربان)، نزله
     if not os.path.exists(file_path) or os.path.getsize(file_path) < 1000:
         print(f"{Ye}[*] Initializing Database... Please wait.{Wh}")
         try:
-            # استخدام verify=False لتجاوز مشاكل الأندرويد ولينكس
             r = requests.get(url, timeout=20, verify=False, headers=HEADERS) 
             if r.status_code == 200:
                 with open(file_path, 'w', encoding='utf-8') as f:
@@ -96,7 +88,6 @@ async def sherlock_search(username):
     except:
         return []
 
-    # استخدام Semaphore لتقليل الضغط (فحص 50 موقع في نفس الوقت)
     semaphore = asyncio.Semaphore(50)
     found_accounts = []
 
@@ -112,8 +103,6 @@ async def sherlock_search(username):
     
     return found_accounts
 
-# --- باقي الدوال الأساسية (Banner, IP, Phone, etc) تبقى كما هي لديك ---
-# (لقد تركتها كما هي لضمان الحفاظ على تصميمك)
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
@@ -245,10 +234,10 @@ def get_country_info(country_name):
             independent = "Yes" if data.get("independent") else "No"
             start_of_week = data.get("startOfWeek", "N/A")
             latlng = data.get("latlng", ["N/A", "N/A"])
-            highest_point = "N/A"  # Would need additional API
-            lowest_point = "N/A"   # Would need additional API
+            highest_point = "N/A"   
+            lowest_point = "N/A"   
             fifa = data.get("fifa", "N/A")
-            ioc = "N/A"  # Not directly available
+            ioc = "N/A"  
 
             favorite_foods = {
                 "Jordan": "Mansaf (lamb cooked in fermented yogurt sauce)",
@@ -486,29 +475,37 @@ def username_osint():
         print(f"{Re}[!] Failed to load data.json: {e}{Wh}")
         return
 
-    # استدعاء البحث async
     import asyncio
 
     async def check_username(session, site, url_template, variation, semaphore):
-     import aiohttp
      async with semaphore:
         try:
             url = url_template.format(variation)
             async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
-                # تحقق إذا المنصة تعتمد على كود الحالة فقط
-                error_type = data_json.get(site, {}).get("errorType", "")
+
+                error_type = data_json.get(site, {}).get("errorType", "content")
+
                 if error_type == "status_code":
                     if r.status in [200, 301, 302]:
                         return (site, url)
                     return None
-                else:
-                    text = await r.text()
-                    not_found = ["not found", "404", "doesn't exist", "profile not found"]
-                    if not any(x in text.lower() for x in not_found):
-                        return (site, url)
-                    return None
+
+                text = await r.text()
+                not_found = [
+                    "not found",
+                    "404",
+                    "doesn't exist",
+                    "profile not found",
+                    "page unavailable",
+                    "user not found"
+                ]
+                if not any(x in text.lower() for x in not_found):
+                    return (site, url)
+
+                return None
         except:
             return None
+
 
 
     async def username_osint_async(user, data_json):
@@ -522,10 +519,8 @@ def username_osint():
                 for var in variations:
                     tasks.append(check_username(session, site, url_template, var, semaphore))
             results = await asyncio.gather(*tasks)
-            # تصفية النتائج الصحيحة فقط
             return [res for res in results if res]
 
-    # تشغيل البحث
     found = asyncio.run(username_osint_async(user, data_json))
 
     if found:
