@@ -457,10 +457,10 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def username_osint():
     sub_banner("USERNAME OSINT")
-    user = input(f"{Wh}[+] Username: {Gr}").strip()
+    user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
+        print(f"{Ye}[!] Going back...{Wh}")
         return
-
     print(f"\n{Gr}[*] Searching for {Ye}{user}{Gr}...{Wh}\n")
 
     import json
@@ -841,7 +841,7 @@ def main():
         elif ch == "5":
             cam_hacker()
         elif ch == "0":
-            print(f"{Gr}  Palestine 🇵🇸")
+            print(f"{Gr}Goodbye! Free Palestine 🇵🇸")
             sys.exit(0)
         else:
             print(f"{Re}[!] Invalid choice")
