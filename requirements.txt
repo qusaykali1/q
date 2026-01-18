@@ -1,8 +1,9 @@
-psutil>=5.9.5
-requests>=2.31.0
-phonenumbers>=8.13.48
-geopy>=2.4.1
+requests
+aiohttp
+phonenumbers
+psutil
+geopy
 colorama
-pygame
-
+urllib3
    
+
