@@ -76,7 +76,6 @@ def setup_database():
 
 setup_database()
 
-
 async def sherlock_search(username):
     file_path = "data.json"
     if not os.path.exists(file_path):
@@ -110,13 +109,13 @@ def clear():
 def banner():
     clear()
     print(f"""{Cy}
-                                                                                     
-  ██╗██████╗ ████████╗██████╗ █████╗ ██████╗██╗ ██╗███████╗██████╗
-  ██║██╔══██╗ ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗
-  ██║██████╔╝█████╗ ██║ ██████╔╝███████║██║ █████╔╝ █████╗ ██████╔╝
-  ██║██╔═══╝ ╚════╝ ██║ ██╔══██╗██╔══██║██║ ██╔═██╗ ██╔══╝ ██╔══██╗
-  ██║██║ ██║ ██║ ██║██║ ██║╚██████╗██║ ██╗███████╗██║ ██║
-  ╚═╝╚═╝ ╚═╝ ╚═╝ ╚═╝╚═╝ ╚═╝ ╚═════╝╚═╝ ╚═╝╚══════╝╚═╝ ╚═╝ {Re}Qusay_kali{Wh}
+                                                                                      
+  ██╗██████╗      ████████╗██████╗  █████╗  ██████╗██╗  ██╗███████╗██████╗    
+  ██║██╔══██╗     ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗   
+  ██║██████╔╝█████╗  ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝   
+  ██║██╔═══╝ ╚════╝  ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗   
+  ██║██║             ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║   
+  ╚═╝╚═╝             ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ {Re}Qusay_kali{Wh}                                                                         
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
@@ -301,9 +300,9 @@ def get_country_info(country_name):
                 "Favorite Food": favorite_food,
                 "Currency": f"{currency_name} ({currency_code})",
                 "Currency Symbol": currency_symbol,
-                "GDP (2022)": gdp,
+                "GDP ": gdp,
                 "Population": population,
-                "Population Growth (2022)": pop_growth,
+                "Population Growth ": pop_growth,
                 "Area": area,
                 "Languages": languages,
                 "Calling Code": calling_code,
@@ -456,8 +455,6 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
                 return None
         except:
             return None
-
-
 def username_osint():
     sub_banner("USERNAME OSINT")
     user = input(f"{Wh}[+] Username: {Gr}").strip()
@@ -466,7 +463,6 @@ def username_osint():
 
     print(f"\n{Gr}[*] Searching for {Ye}{user}{Gr}...{Wh}\n")
 
-    # تحميل data.json
     import json
     try:
         with open("data.json", "r", encoding="utf-8") as f:
@@ -476,50 +472,77 @@ def username_osint():
         return
 
     import asyncio
+    import aiohttp
 
-    async def check_username(session, site, url_template, variation, semaphore):
-     async with semaphore:
-        try:
-            url = url_template.format(variation)
-            async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
+    async def check_username(session, site, url_template, variation, semaphore, data_json):
+        async with semaphore:
+            try:
+                url = url_template.format(variation)
+                async with session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5) as r:
 
-                error_type = data_json.get(site, {}).get("errorType", "content")
+                    error_type = data_json.get(site, {}).get("errorType", "content")
 
-                if error_type == "status_code":
-                    if r.status in [200, 301, 302]:
-                        return (site, url)
+                    if error_type == "status_code":
+                        if r.status in (200, 301, 302):
+                            final_url = str(r.url).lower()
+
+                            if any(word in final_url for word in ("login", "signup", "register", "auth")):
+                                return None
+
+                            return site, url
+                        return None
+
+                    text = await r.text()
+                    not_found = [
+                        "not found",
+                        "does not exist",
+                        "page unavailable",
+                        "404",
+                        "user not found",
+                        "profile not found",
+                        "doesn't exist"
+                    ]
+
+                    if not any(x in text.lower() for x in not_found):
+                        return site, url
+
                     return None
-
-                text = await r.text()
-                not_found = [
-                    "not found",
-                    "404",
-                    "doesn't exist",
-                    "profile not found",
-                    "page unavailable",
-                    "user not found"
-                ]
-                if not any(x in text.lower() for x in not_found):
-                    return (site, url)
-
+            except:
                 return None
-        except:
-            return None
 
-
+    
 
     async def username_osint_async(user, data_json):
-        import aiohttp
-        semaphore = asyncio.Semaphore(20)
-        async with aiohttp.ClientSession() as session:
-            tasks = []
-            for site, info in data_json.items():
-                url_template = info.get("url") if isinstance(info, dict) else info
-                variations = [user, user.lower(), user.upper(), user.capitalize()]
-                for var in variations:
-                    tasks.append(check_username(session, site, url_template, var, semaphore))
-            results = await asyncio.gather(*tasks)
-            return [res for res in results if res]
+     semaphore = asyncio.Semaphore(20)
+     async with aiohttp.ClientSession() as session:
+        tasks = []
+
+        base = user
+        chars = ["", "_", ".", "-", "1", "2", "3", "x", "z", "official", "real"]
+
+        variations = set()
+        for c in chars:
+            variations.add(f"{base}{c}")
+            variations.add(f"{c}{base}")
+            variations.add(f"{base}_{c}")
+            variations.add(f"{c}_{base}")
+            variations.add(f"{base}.{c}")
+            variations.add(f"{c}.{base}")
+
+        variations.add(base.lower())
+        variations.add(base.upper())
+        variations.add(base.capitalize())
+        variations = list(variations)
+
+        for site, info in data_json.items():
+            url_template = info.get("url") if isinstance(info, dict) else info
+            for var in variations:
+                tasks.append(check_username(session, site, url_template, var, semaphore, data_json))
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        return [res for res in results if isinstance(res, tuple) and res]
+
+
 
     found = asyncio.run(username_osint_async(user, data_json))
 
@@ -818,7 +841,7 @@ def main():
         elif ch == "5":
             cam_hacker()
         elif ch == "0":
-            print(f"{Gr}Goodbye! Free Palestine 🇵🇸")
+            print(f"{Gr}  Palestine 🇵🇸")
             sys.exit(0)
         else:
             print(f"{Re}[!] Invalid choice")
