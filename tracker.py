@@ -14,7 +14,10 @@ import re
 import uuid
 import asyncio
 import aiohttp
-import webbrowser  # Optional: to open map automatically
+import webbrowser
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 try:
     import psutil
@@ -29,7 +32,6 @@ except ImportError:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
-# Colors
 Bl = '\033[30m'
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
@@ -43,8 +45,66 @@ PAL_EN = f"{Re}P{Gr}A{Wh}L{Bl}E{Re}S{Gr}T{Wh}I{Bl}N{Re}E{Wh}"
 FREE_PAL = f"{Gr} {PAL_EN} 🇵🇸{Wh}"
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 }
+
+def setup_database():
+    file_path = "data.json"
+    url = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock/resources/data.json"
+    
+    if not os.path.exists(file_path) or os.path.getsize(file_path) < 1000:
+        print(f"{Ye}[*] Initializing Database... Please wait.{Wh}")
+        try:
+            r = requests.get(url, timeout=20, verify=False, headers=HEADERS) 
+            if r.status_code == 200:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(r.text)
+                print(f"{Gr}[+] Database downloaded successfully!{Wh}")
+            else:
+                print(f"{Re}[!] Failed to download database. Status: {r.status_code}{Wh}")
+        except Exception as e:
+            print(f"{Re}[!] Connection error during setup: {e}{Wh}")
+
+setup_database()
+
+async def sherlock_check(session, site_name, site_url, username, semaphore):
+    async with semaphore:
+        url = site_url.format(username=username)
+        try:
+            async with session.get(url, headers=HEADERS, timeout=10, allow_redirects=True) as resp:
+                if resp.status == 200:
+                    content = await resp.text()
+                    if username.lower() in content.lower():
+                        return (site_name, url)
+        except:
+            pass
+        return None
+
+async def sherlock_search(username):
+    file_path = "data.json"
+    if not os.path.exists(file_path):
+        return []
+        
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except:
+        return []
+
+    semaphore = asyncio.Semaphore(50)
+    found_accounts = []
+
+    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
+        tasks = []
+        for site in data:
+            site_url = data[site].get("url")
+            if site_url:
+                tasks.append(sherlock_check(session, site, site_url, username, semaphore))
+        
+        results = await asyncio.gather(*tasks)
+        found_accounts = [r for r in results if r]
+    
+    return found_accounts
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
@@ -742,3 +802,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
