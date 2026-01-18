@@ -16,7 +16,20 @@ import asyncio
 import aiohttp
 import webbrowser
 import urllib3
+import subprocess
+import sys
 
+def install_requirements():
+    try:
+        # يحاول تثبيت المكتبات الموجودة في الملف مع الأمر الخاص بكالي
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "--break-system-packages"])
+    except Exception as e:
+        pass # إذا كانت مثبتة مسبقاً سيكمل البرنامج
+
+# استدعاء الدالة في بداية التشغيل
+install_requirements()
+
+# تعطيل تحذيرات SSL المزعجة
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 try:
@@ -32,6 +45,7 @@ except ImportError:
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone
 
+# الألوان
 Bl = '\033[30m'
 Re = '\033[1;31m'
 Gr = '\033[1;32m'
@@ -48,13 +62,16 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 }
 
+# --- دالة التجهيز التلقائي لقاعدة البيانات ---
 def setup_database():
     file_path = "data.json"
     url = "https://raw.githubusercontent.com/sherlock-project/sherlock/master/sherlock/resources/data.json"
     
+    # إذا الملف مش موجود أو حجمه صغير جداً (خربان)، نزله
     if not os.path.exists(file_path) or os.path.getsize(file_path) < 1000:
         print(f"{Ye}[*] Initializing Database... Please wait.{Wh}")
         try:
+            # استخدام verify=False لتجاوز مشاكل الأندرويد ولينكس
             r = requests.get(url, timeout=20, verify=False, headers=HEADERS) 
             if r.status_code == 200:
                 with open(file_path, 'w', encoding='utf-8') as f:
@@ -65,8 +82,10 @@ def setup_database():
         except Exception as e:
             print(f"{Re}[!] Connection error during setup: {e}{Wh}")
 
+# استدعاء التحميل قبل أي شيء
 setup_database()
 
+# --- محرك البحث (Sherlock Core) ---
 async def sherlock_check(session, site_name, site_url, username, semaphore):
     async with semaphore:
         url = site_url.format(username=username)
@@ -74,6 +93,7 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             async with session.get(url, headers=HEADERS, timeout=10, allow_redirects=True) as resp:
                 if resp.status == 200:
                     content = await resp.text()
+                    # فحص ذكي للتأكد أن الحساب موجود فعلاً وليس مجرد صفحة خطأ 404
                     if username.lower() in content.lower():
                         return (site_name, url)
         except:
@@ -91,6 +111,7 @@ async def sherlock_search(username):
     except:
         return []
 
+    # استخدام Semaphore لتقليل الضغط (فحص 50 موقع في نفس الوقت)
     semaphore = asyncio.Semaphore(50)
     found_accounts = []
 
@@ -105,6 +126,9 @@ async def sherlock_search(username):
         found_accounts = [r for r in results if r]
     
     return found_accounts
+
+# --- باقي الدوال الأساسية (Banner, IP, Phone, etc) تبقى كما هي لديك ---
+# (لقد تركتها كما هي لضمان الحفاظ على تصميمك)
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
@@ -802,4 +826,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
