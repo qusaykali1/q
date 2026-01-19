@@ -1335,7 +1335,7 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        banner("Main Menu")
+        sub_banner("Main Menu")
 
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
