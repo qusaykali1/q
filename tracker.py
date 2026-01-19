@@ -121,7 +121,7 @@ async def sherlock_search(username):
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-def banner():
+def banner(title=""):
     clear()
     print(f"""{Cy}
                                                                                       
@@ -134,6 +134,8 @@ def banner():
 ------------------------------------------------------------
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
+    if title:
+        print(f"{LC}================ {title.upper()} ================{Wh}")
 
 def show_banner(title=""):
     clear()
