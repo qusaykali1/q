@@ -472,57 +472,47 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def EchoIntel():
     while True:
-        show_banner("EchoIntel")
+        sub_banner("EchoIntel - Information Gathering")
 
         print(f"{LG}EchoIntel Tools:")
         print(f"{B}  1 {W}- Information Gathering")
         print(f"{B}  2 {W}- Back\n")
 
         ch = input(f"{W} → ").strip()
-        if ch == "":
-           return
-
-
 
         if ch == "2":
             return
 
         elif ch == "1":
             while True:
-                show_banner("EchoIntel - Information Gathering") 
+                show_banner("Information Gathering")
 
-                print(LG + "Available Tools:" + Style.RESET_ALL)
-                print(G + "  [1]  IP Tracker" + Style.RESET_ALL)
-                print(G + "  [2]  Device Information" + Style.RESET_ALL)
-                print(G + "  [3]  Phone Number OSINT" + Style.RESET_ALL)
-                print(G + "  [4]  Username OSINT" + Style.RESET_ALL)
-                print(G + "  [5]  Cam-hacker" + Style.RESET_ALL)
-                print(G + "  [6]  EchoIntel" + Style.RESET_ALL)
-                print(R + "  [0]  Exit" + Style.RESET_ALL)
-
+                print(f"{LG}\nAvailable tools:")
+                print(f"{B}  1 {W}- Bypass CloudFlare ")
+                print(f"{B}  2 {W}- CMS Detection")
+                print(f"{B}  3 {W}- Whois Lookup")
+                print(f"{B}  4 {W}- DNS Lookup")
+                print(f"{B}  5 {W}- Robots r")
+                print(f"{B}  0 {W}- Back to Main Menu\n")
 
                 sub = input(f"{W} → ").strip()
 
                 if sub == "0":
                     break
                 elif sub == "1":
-                    IP_Track()
+                    bypass_cloudflare()
                 elif sub == "2":
-                    device_info()
+                    cms_detection()
                 elif sub == "3":
-                    phone_osint()
+                    whois_lookup()
                 elif sub == "4":
-                    username_osint()
+                    dns_lookup()
                 elif sub == "5":
-                    cam_hacker()
-                elif ch == "6":
-                    EchoIntel()
+                    robots_admin_scanner()
                 else:
-                    print(f"{LR}[!] Invalid option")
-                    time.sleep(1)
-        else:
-            print(f"{LR}[!] Invalid option")
-            time.sleep(1)
+                    print(f"{LY}[!] Please select 0-5")
+
+
 
 
 def show_banner(title=""):
@@ -1345,8 +1335,8 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        banner()
-        
+        show_banner("Main Menu")
+
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
         print("  [2]  Device Information")
@@ -1355,27 +1345,37 @@ def main():
         print("  [5]  Cam-hacker")
         print("  [6]  EchoIntel")
         print(f"  [0]  Exit{Wh}\n")
-        
+
         ch = input(f"{Wh}Select an option → {Gr}").strip()
 
         if ch == "0":
             print(f"\n{Gr}Thank you! Free Palestine 🇵🇸{Wh}")
             sys.exit(0)
+
         elif ch == "1":
             IP_Track()
+
         elif ch == "2":
             device_info()
+
         elif ch == "3":
             phone_osint()
+
         elif ch == "4":
             username_osint()
+
         elif ch == "5":
             cam_hacker()
+
         elif ch == "6":
             EchoIntel()
+
         else:
             print(f"{Re}Invalid Option!{Wh}")
             time.sleep(1)
+
+
+
 if __name__ == "__main__":
     try:
         main()
