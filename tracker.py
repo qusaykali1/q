@@ -344,7 +344,7 @@ def get_country_info(country_name):
 
 def IP_Track():
     while True:
-        sub_banner("IP TRACKER")
+        banner("IP TRACKER")
         print(f"{Wh}[+] Target IP (press Enter to go back): {Gr}", end="")
         ip = input().strip()
 
@@ -472,7 +472,7 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def EchoIntel():
     while True:
-        sub_banner("EchoIntel - Information Gathering")
+        show_banner("EchoIntel - Information Gathering")
 
         print(f"{LG}EchoIntel Tools:")
         print(f"{B}  1 {W}- Information Gathering")
@@ -1335,7 +1335,7 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        sub_banner("Main Menu")
+        banner("Main Menu")
 
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
