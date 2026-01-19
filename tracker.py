@@ -121,7 +121,7 @@ async def sherlock_search(username):
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-def banner():
+def sub_banner():
     clear()
     print(f"""{Cy}
                                                                                       
@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                banner("Information Gathering")
+                sub_banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -1381,4 +1381,3 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print(f"\n{R}Program terminated")
-
