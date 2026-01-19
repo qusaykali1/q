@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                sub_banner("Information Gathering")
+                show_banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -515,7 +515,7 @@ def EchoIntel():
 
 
 
-def sub_banner(title=""):
+def show_banner(title=""):
     clear()
     
     print(f"""{C}
