@@ -472,48 +472,6 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
                 return None
         except:
             return None
-def EchoIntel():
-    while True:
-        show_banner(" Information Gathering")
-
-        print(f"{LG}EchoIntel Tools:")
-        print(f"{B}  1 {W}- Information Gathering")
-        print(f"{B}  2 {W}- Back\n")
-
-        ch = input(f"{W} → ").strip()
-
-        if ch == "2":
-            return
-
-        elif ch == "1":
-            while True:
-                show_banner("Information Gathering")
-
-                print(f"{LG}\nAvailable tools:")
-                print(f"{B}  1 {W}- Bypass CloudFlare ")
-                print(f"{B}  2 {W}- CMS Detection")
-                print(f"{B}  3 {W}- Whois Lookup")
-                print(f"{B}  4 {W}- DNS Lookup")
-                print(f"{B}  5 {W}- Robots r")
-                print(f"{B}  0 {W}- Back to Main Menu\n")
-
-                sub = input(f"{W} → ").strip()
-
-                if sub == "0":
-                    break
-                elif sub == "1":
-                    bypass_cloudflare()
-                elif sub == "2":
-                    cms_detection()
-                elif sub == "3":
-                    whois_lookup()
-                elif sub == "4":
-                    dns_lookup()
-                elif sub == "5":
-                    robots_admin_scanner()
-                else:
-                    print(f"{LY}[!] Please select 0-5")
-
 
 
 
@@ -970,6 +928,48 @@ def robots_admin_scanner():
             pass
 
     input(f"{LG}\nPress Enter to return...")
+    def EchoIntel():
+     while True:
+        _banner_classic("Information Gathering")
+
+
+        print(f"{LG}EchoIntel Tools:")
+        print(f"{B}  1 {W}- Information Gathering")
+        print(f"{B}  2 {W}- Back\n")
+
+        ch = input(f"{W} → ").strip()
+
+        if ch == "2":
+            return
+
+        elif ch == "1":
+            while True:
+                _banner_classic("Information Gathering")
+
+                print(f"{LG}\nAvailable tools:")               
+                print(f"{B}  1 {W}- CMS Detection")
+                print(f"{B}  2 {W}- Whois Lookup")
+                print(f"{B}  3 {W}- DNS Lookup")
+                print(f"{B}  4 {W}- Robots ")
+                print(f"{B}  5 {W}- Back to Main Menu\n")
+
+                sub = input(f"{W} → ").strip()
+
+                if sub == "4":
+                    break
+                elif sub == "1":
+                    cms_detection()
+                elif sub == "2":
+                    whois_lookup()
+                elif sub == "3":
+                    dns_lookup()
+                elif sub == "4":
+                    robots_admin_scanner()
+                else:
+                    print(f"{LY}[!] Please select 0-4")
+
+
+
 def username_osint():
     _banner_iconic("USERNAME ")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
@@ -1371,7 +1371,7 @@ def main():
             cam_hacker()
 
         elif ch == "6":
-            EchoIntel()
+          _banner_classic()
 
         else:
             print(f"{Re}Invalid Option!{Wh}")
