@@ -472,7 +472,7 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def EchoIntel():
     while True:
-        sub_banner(" Information Gathering")
+        banner(" Information Gathering")
 
         print(f"{LG}EchoIntel Tools:")
         print(f"{B}  1 {W}- Information Gathering")
@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                sub_banner("Information Gathering")
+                banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -840,7 +840,7 @@ WP_PLUGINS = [
 
 
 def bypass_cloudflare():
-    sub_banner("Bypass CloudFlare")
+    banner("Bypass CloudFlare")
     print(f"{LY}[!] Enter domain (example.com - no http/https)")
     domain = input(f"{W} → ").strip()
 
@@ -866,7 +866,7 @@ def bypass_cloudflare():
 
 
 def cms_detection():
-    sub_banner("CMS Detection")
+    banner("CMS Detection")
     print(f"{LY}[!] Enter target URL (with http:// or https://)")
     url = input(f"{W} → ").strip()
 
@@ -901,25 +901,25 @@ def cms_detection():
 
 
 def whois_lookup():
-    sub_banner("Whois Lookup")
-    print(f"{LY}[!] Enter domain or IP")
-    target = input(f"{W} → ").strip()
+       sub_banner("Whois Lookup")
+print(f"{LY}[!] Enter domain or IP")
+target = input(f"{W} → ").strip()
 
-    try:
+try:
         r = requests.get(f'http://api.hackertarget.com/whois/?q={target}', timeout=15)
         result = r.text.strip()
         if result and len(result) > 20:
             print(f"{W}\n{result}")
         else:
             print(f"{Y}[!] No useful whois data returned")
-    except Exception as e:
+except Exception as e:
         print(f"{LR}[!] Failed: {str(e)}")
 
-    input(f"{LG}\nPress Enter to return...")
+input(f"{LG}\nPress Enter to return...")
 
 
 def dns_lookup():
-    sub_banner("DNS Lookup")
+    banner("DNS Lookup")
     print(f"{LY}[!] Enter domain")
     target = input(f"{W} → ").strip()
 
@@ -937,7 +937,7 @@ def dns_lookup():
 
 
 def robots_admin_scanner():
-    sub_banner("Robots & Admin Scanner")
+    banner("Robots & Admin Scanner")
     print(f"{LY}[!] Enter website (with http or https)")
     url = input(f"{W} → ").strip()
 
