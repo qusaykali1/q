@@ -18,8 +18,21 @@ import webbrowser
 import urllib3
 import subprocess
 import sys
-from colorama import Fore, init
+from colorama import Fore, Style, init
 init(autoreset=True)
+
+R  = Fore.RED
+LR = Fore.LIGHTRED_EX
+G  = Fore.GREEN
+LG = Fore.LIGHTGREEN_EX
+Y  = Fore.YELLOW
+LY = Fore.LIGHTYELLOW_EX
+B  = Fore.BLUE
+LB = Fore.LIGHTBLUE_EX
+C  = Fore.CYAN
+LC = Fore.LIGHTCYAN_EX
+W  = Fore.WHITE
+
 
 def install_requirements():
     try:
@@ -458,22 +471,58 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
         except:
             return None
 def EchoIntel():
-    ()          # مسح الشاشة
-    ()           
-R  = Fore.RED
-LR = Fore.LIGHTRED_EX
-G  = Fore.GREEN
-LG = Fore.LIGHTGREEN_EX
-Y  = Fore.YELLOW
-LY = Fore.LIGHTYELLOW_EX
-B  = Fore.BLUE
-LB = Fore.LIGHTBLUE_EX
-C  = Fore.CYAN
-LC = Fore.LIGHTCYAN_EX
-W  = Fore.WHITE
+    while True:
+        show_banner("EchoIntel")
 
-def clear():
-    os.system('cls' if os.name == 'nt' else 'clear')
+        print(f"{LG}EchoIntel Tools:")
+        print(f"{B}  1 {W}- Information Gathering")
+        print(f"{B}  2 {W}- Back\n")
+
+        ch = input(f"{W} → ").strip()
+        if ch == "":
+         return
+
+
+        if ch == "2":
+            return
+
+        elif ch == "1":
+            while True:
+                banner("EchoIntel - Information Gathering")
+
+                print(LG + "Available Tools:" + Style.RESET_ALL)
+                print(G + "  [1]  IP Tracker" + Style.RESET_ALL)
+                print(G + "  [2]  Device Information" + Style.RESET_ALL)
+                print(G + "  [3]  Phone Number OSINT" + Style.RESET_ALL)
+                print(G + "  [4]  Username OSINT" + Style.RESET_ALL)
+                print(G + "  [5]  Cam-hacker" + Style.RESET_ALL)
+                print(G + "  [6]  EchoIntel" + Style.RESET_ALL)
+                print(R + "  [0]  Exit" + Style.RESET_ALL)
+
+
+                sub = input(f"{W} → ").strip()
+
+                if sub == "0":
+                    break
+                elif sub == "1":
+                    IP_Track()
+                elif sub == "2":
+                    device_info()
+                elif sub == "3":
+                    phone_osint()
+                elif sub == "4":
+                    username_osint()
+                elif sub == "5":
+                    cam_hacker()
+                elif ch == "6":
+                    EchoIntel()
+                else:
+                    print(f"{LR}[!] Invalid option")
+                    time.sleep(1)
+        else:
+            print(f"{LR}[!] Invalid option")
+            time.sleep(1)
+
 
 def show_banner(title=""):
     clear()
@@ -492,11 +541,6 @@ def show_banner(title=""):
 
     if title:
         print(f"{LC}================ {title} ================")
-
-
-if __name__ == "__main__":
-    show_banner("EchoIntel v1.1")
-    print("\nBanner test complete!")
 
 SUBDOMAINS = [
     'ftp', 'cpanel', 'webmail', 'localhost', 'local', 'mysql', 'forum', 'direct-connect', 'blog', 'vb', 'forums', 'home', 'direct', 'mail', 'access', 'admin', 'administrator', 'email', 'downloads', 'ssh', 'owa', 'bbs', 'webmin', 'parallel', 'parallels', 'www0', 'www', 'www1', 'www2', 'www3', 'www4', 'www5', 'shop', 'api', 'blogs', 'test', 'mx1', 'cdn', 'mysql', 'mail1', 'secure', 'server', 'ns1', 'ns2', 'smtp', 'vpn', 'm', 'mail2', 'postal', 'support', 'web', 'dev'
@@ -934,64 +978,8 @@ def robots_admin_scanner():
             pass
 
     input(f"{LG}\nPress Enter to return...")
-
-
-def main():
-    show_banner()
-
-    while True:
-        show_banner("Main Menu")
-        print(f"{LG}\nChoose an option:")
-        print(f"{B}  1 {W}- Information Gathering")
-        print(f"{B}  2 {W}- Exit\n")
-
-        choice = input(f"{W} → ").strip()
-
-        if choice == '2':
-            print(f"{G}Goodbye!")
-            sys.exit(0)
-
-        elif choice == '1':
-            while True:
-                show_banner("Information Gathering")
-                print(f"{LG}\nAvailable tools:")
-                print(f"{B}  1 {W}- Bypass CloudFlare ")
-                print(f"{B}  2 {W}- CMS Detection")
-                print(f"{B}  3 {W}- Whois Lookup")
-                print(f"{B}  4 {W}- DNS Lookup")
-                print(f"{B}  5 {W}- Robots r")
-                print(f"{B}  0 {W}- Back to Main Menu\n")
-
-                sub = input(f"{W} → ").strip()
-
-                if sub == '0':
-                    break
-                elif sub == '1':
-                    bypass_cloudflare()
-                elif sub == '2':
-                    cms_detection()
-                elif sub == '3':
-                    whois_lookup()
-                elif sub == '4':
-                    dns_lookup()
-                elif sub == '5':
-                    robots_admin_scanner()
-                else:
-                    print(f"{LY}[!] Please select 0-5")
-
-        else:
-            print(f"{LY}[!] Please select 1 or 2")
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print(f"\n{G}Program terminated.")
-
-
 def username_osint():
-    sub_banner("USERNAME OSINT")
+    show_banner("USERNAME OSINT")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
         print(f"{Ye}[!] Going back...{Wh}")
@@ -1051,7 +1039,6 @@ def username_osint():
      semaphore = asyncio.Semaphore(20)
      async with aiohttp.ClientSession() as session:
         tasks = []
-
         base = user
         chars = ["", "_", ".", "-", "1", "2", "3", "x", "z", "official", "real"]
 
@@ -1373,18 +1360,23 @@ def main():
         if ch == "0":
             print(f"\n{Gr}Thank you! Free Palestine 🇵🇸{Wh}")
             sys.exit(0)
-
-        action = {
-            "1": IP_Track,
-            "2": device_info,
-            "3": phone_osint,
-            "4": username_osint,
-            "5": cam_hacker,
-            "6": EchoIntel
-        }.get(ch)
-
-        if action:
-            action()
+        elif ch == "1":
+            IP_Track()
+        elif ch == "2":
+            device_info()
+        elif ch == "3":
+            phone_osint()
+        elif ch == "4":
+            username_osint()
+        elif ch == "5":
+            cam_hacker()
+        elif ch == "6":
+            EchoIntel()
         else:
-            print(f"{Re}Invalid selection. Please try again.{Wh}")
-            # No need for extra input() — returns to menu immediately
+            print(f"{Re}Invalid Option!{Wh}")
+            time.sleep(1)
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"\n{R}Program terminated")
