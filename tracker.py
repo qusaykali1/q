@@ -480,7 +480,8 @@ def EchoIntel():
 
         ch = input(f"{W} → ").strip()
         if ch == "":
-         return
+           return
+
 
 
         if ch == "2":
@@ -488,7 +489,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                banner("EchoIntel - Information Gathering")
+                show_banner("EchoIntel - Information Gathering") 
 
                 print(LG + "Available Tools:" + Style.RESET_ALL)
                 print(G + "  [1]  IP Tracker" + Style.RESET_ALL)
