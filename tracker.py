@@ -515,7 +515,7 @@ def EchoIntel():
 
 
 
-def sub_banner(title=""):
+def banner(title=""):
     clear()
     
     print(f"""{C}
