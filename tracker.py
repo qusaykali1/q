@@ -121,7 +121,7 @@ async def sherlock_search(username):
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-def sub_banner():
+def banner():
     clear()
     print(f"""{Cy}
                                                                                       
@@ -1335,7 +1335,7 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        sub_banner("Main Menu")
+        banner("Main Menu")
 
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
