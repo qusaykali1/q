@@ -970,7 +970,7 @@ def robots_admin_scanner():
 
     input(f"{LG}\nPress Enter to return...")
 def username_osint():
-    sub_banner("USERNAME OSINT")
+    banner("USERNAME ")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
         print(f"{Ye}[!] Going back...{Wh}")
