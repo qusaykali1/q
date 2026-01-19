@@ -472,7 +472,7 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def EchoIntel():
     while True:
-        banner(" Information Gathering")
+        sub_banner(" Information Gathering")
 
         print(f"{LG}EchoIntel Tools:")
         print(f"{B}  1 {W}- Information Gathering")
@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                banner("Information Gathering")
+                sub_banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -515,7 +515,7 @@ def EchoIntel():
 
 
 
-def banner(title=""):
+def sub_banner(title=""):
     clear()
     
     print(f"""{C}
@@ -840,7 +840,7 @@ WP_PLUGINS = [
 
 
 def bypass_cloudflare():
-    banner("Bypass CloudFlare")
+    sub_banner("Bypass CloudFlare")
     print(f"{LY}[!] Enter domain (example.com - no http/https)")
     domain = input(f"{W} → ").strip()
 
@@ -866,7 +866,7 @@ def bypass_cloudflare():
 
 
 def cms_detection():
-    banner("CMS Detection")
+    sub_banner("CMS Detection")
     print(f"{LY}[!] Enter target URL (with http:// or https://)")
     url = input(f"{W} → ").strip()
 
@@ -919,7 +919,7 @@ input(f"{LG}\nPress Enter to return...")
 
 
 def dns_lookup():
-    banner("DNS Lookup")
+    sub_banner("DNS Lookup")
     print(f"{LY}[!] Enter domain")
     target = input(f"{W} → ").strip()
 
@@ -937,7 +937,7 @@ def dns_lookup():
 
 
 def robots_admin_scanner():
-    banner("Robots & Admin Scanner")
+    sub_banner("Robots & Admin Scanner")
     print(f"{LY}[!] Enter website (with http or https)")
     url = input(f"{W} → ").strip()
 
