@@ -1,7 +1,7 @@
 requests
-aiohttp
+aiohttp 
+urllib3
+colorama
 phonenumbers
 psutil
 geopy
-colorama
-urllib3
