@@ -117,14 +117,12 @@ def sub_banner(title=""):
 {Re}               \\\\  {Wh}'-.      {Ye}WWWW      {Wh}.-' {Re}  //
 {Re}                \\\\    {Wh}'--------------' {Re}    //
 {Re}                 '                          '
-{Wh}          ______________
-{Wh}         | {Cy}STATUS: {Re}MALICIOUS INITIALIZATION DETECTED {Wh}|
-{Wh}         | {Cy}ENCRYPTION: {Ye}AES-RSA-MIXED-2048-BIT        {Wh}|
-{Wh}         | {Wh}------------------------------------------ {Wh}|
-{Wh}         | {Gr}  AUTHOR: {Wh}Qusay_kali                      {Wh}|
-{Wh}         | {Gr}  MODULE: {Wh}CYBER SECURITY                  {Wh}|
-{Wh}         |______________|
-{Re}           [!] WARNING: YOU ARE ENTERING A DARK ZONE [!]
+{Wh}          ____________________________________
+{Wh}         | {Cy}  version: {Re}1.1  {Wh}                  |
+{Wh}         | {Wh}----------------------------------{Wh}|
+{Wh}         | {Gr}  AUTHOR: {Wh}Qusay_kali              {Wh}|
+{Wh}         | {Gr}  MODULE: {Wh}CYBER SECURITY          {Wh}|
+{Wh}         |___________________________________|
     """)
 def filter_p(val):
     bad = ["Israel", "IL", "israel"]
@@ -751,4 +749,3 @@ def main():
         input(f"{Wh}\nPress Enter to continue...")
 if __name__ == "__main__":
     main()
-
