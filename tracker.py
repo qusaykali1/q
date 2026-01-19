@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                sub_banner("Information Gathering")
+                banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -1381,3 +1381,4 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print(f"\n{R}Program terminated")
+
