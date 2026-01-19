@@ -137,7 +137,7 @@ def banner(title=""):
     if title:
         print(f"{LC}================ {title.upper()} ================{Wh}")
 
-def show_banner(title=""):
+def _banner_iconic(title=""):
     clear()
     print(f"""
 {Re}                 .                         .
@@ -346,7 +346,7 @@ def get_country_info(country_name):
 
 def IP_Track():
     while True:
-        banner("IP TRACKER")
+        _banner_iconic("IP TRACKER")
         print(f"{Wh}[+] Target IP (press Enter to go back): {Gr}", end="")
         ip = input().strip()
 
@@ -517,9 +517,8 @@ def EchoIntel():
 
 
 
-def show_banner(title=""):
+def _banner_classic(title=""):
     clear()
-
     print(f"""{C}
    ███████╗ ██████╗██╗  ██╗ ██████╗ ██████╗ ███████╗██╗███╗   ██╗████████╗███████╗██╗     
    ██╔════╝██╔════╝██║  ██║██╔═══██╗██╔══██╗██╔════╝██║████╗  ██║╚══██╔══╝██╔════╝██║     
@@ -531,9 +530,9 @@ def show_banner(title=""):
  {Y}Instagram : @qusay_kali1   {C}🇵🇸 palestin   {Y}youtube : @Qusay_kali{W} 
 ------------------------------------------------------------
     """)
-
     if title:
-        print(f"{LC}================ {title} ================")
+        print(f"{G}==== {title.upper()} ===={W}\n")
+
 
 SUBDOMAINS = [
     'ftp', 'cpanel', 'webmail', 'localhost', 'local', 'mysql', 'forum', 'direct-connect', 'blog', 'vb', 'forums', 'home', 'direct', 'mail', 'access', 'admin', 'administrator', 'email', 'downloads', 'ssh', 'owa', 'bbs', 'webmin', 'parallel', 'parallels', 'www0', 'www', 'www1', 'www2', 'www3', 'www4', 'www5', 'shop', 'api', 'blogs', 'test', 'mx1', 'cdn', 'mysql', 'mail1', 'secure', 'server', 'ns1', 'ns2', 'smtp', 'vpn', 'm', 'mail2', 'postal', 'support', 'web', 'dev'
@@ -842,7 +841,7 @@ WP_PLUGINS = [
 
 
 def bypass_cloudflare():
-    show_banner("Bypass CloudFlare")
+    _banner_classic("Bypass CloudFlare")
     print(f"{LY}[!] Enter domain (example.com - no http/https)")
     domain = input(f"{W} → ").strip()
 
@@ -868,7 +867,7 @@ def bypass_cloudflare():
 
 
 def cms_detection():
-    show_banner("CMS Detection")
+    _banner_classic("CMS Detection")
     print(f"{LY}[!] Enter target URL (with http:// or https://)")
     url = input(f"{W} → ").strip()
 
@@ -903,7 +902,7 @@ def cms_detection():
 
 
 def whois_lookup():
-       show_banner("Whois Lookup")
+       _banner_classic("Whois Lookup")
 print(f"{LY}[!] Enter domain or IP")
 target = input(f"{W} → ").strip()
 
@@ -921,7 +920,7 @@ input(f"{LG}\nPress Enter to return...")
 
 
 def dns_lookup():
-    show_banner("DNS Lookup")
+    _banner_classic("DNS Lookup")
     print(f"{LY}[!] Enter domain")
     target = input(f"{W} → ").strip()
 
@@ -939,7 +938,7 @@ def dns_lookup():
 
 
 def robots_admin_scanner():
-    show_banner("Robots & Admin Scanner")
+    _banner_classic("Robots & Admin Scanner")
     print(f"{LY}[!] Enter website (with http or https)")
     url = input(f"{W} → ").strip()
 
@@ -972,7 +971,7 @@ def robots_admin_scanner():
 
     input(f"{LG}\nPress Enter to return...")
 def username_osint():
-    show_banner("USERNAME ")
+    _banner_iconic("USERNAME ")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
         print(f"{Ye}[!] Going back...{Wh}")
@@ -1072,7 +1071,7 @@ def username_osint():
 
 
 def phone_osint():
-    show_banner("Phone Number OSINT")
+    _banner_iconic("Phone Number OSINT")
     num = input(f"{Wh}[+] +962xxx (press Enter to go back): {Gr}").strip()
 
     if not num:
@@ -1153,7 +1152,7 @@ def phone_osint():
     input(f"{Wh}\nPress Enter to continue...")
 
 def device_info():
-    show_banner("Device Information")
+    _banner_iconic("Device Information")
     host = socket.gethostname()
     address_full = "N/A"
 
@@ -1236,7 +1235,7 @@ def fetch_from_source(name, base_url, regex_pat, filename):
 
 def additional_cams_menu():
     while True:
-        show_banner("Public Webcams")
+        _banner_iconic("Public Webcams")
         print(f"{Wh}[1]{Gr} EarthCam")
         print(f"{Wh}[2]{Gr} SkylineWebcams")
         print(f"{Wh}[3]{Gr} Opentopia")
@@ -1261,7 +1260,7 @@ def additional_cams_menu():
             print(f"{Re}[!] Invalid choice")
 
 def cam_hacker():
-    show_banner("Cam Hacker")
+    _banner_iconic("Cam Hacker")
     try:
         import colorama
         colorama.init()
@@ -1337,7 +1336,8 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        banner("Main Menu")
+        _banner_iconic("classic", "Main Menu")
+
 
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
@@ -1349,6 +1349,7 @@ def main():
         print(f" [0]  Exit{Wh}\n")
 
         ch = input(f"{Wh}Select an option → {Gr}").strip()
+        _banner_iconic("iconic", "Information Gathering")
 
         if ch == "0":
             print(f"\n{Gr}Thank you 🇵🇸{Wh}")
