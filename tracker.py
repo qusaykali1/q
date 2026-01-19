@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                show_banner("Information Gathering")
+                sub_banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -840,7 +840,7 @@ WP_PLUGINS = [
 
 
 def bypass_cloudflare():
-    show_banner("Bypass CloudFlare")
+    sub_banner("Bypass CloudFlare")
     print(f"{LY}[!] Enter domain (example.com - no http/https)")
     domain = input(f"{W} → ").strip()
 
@@ -866,7 +866,7 @@ def bypass_cloudflare():
 
 
 def cms_detection():
-    show_banner("CMS Detection")
+    sub_banner("CMS Detection")
     print(f"{LY}[!] Enter target URL (with http:// or https://)")
     url = input(f"{W} → ").strip()
 
@@ -901,7 +901,7 @@ def cms_detection():
 
 
 def whois_lookup():
-    show_banner("Whois Lookup")
+    sub_banner("Whois Lookup")
     print(f"{LY}[!] Enter domain or IP")
     target = input(f"{W} → ").strip()
 
@@ -919,7 +919,7 @@ def whois_lookup():
 
 
 def dns_lookup():
-    show_banner("DNS Lookup")
+    sub_banner("DNS Lookup")
     print(f"{LY}[!] Enter domain")
     target = input(f"{W} → ").strip()
 
@@ -937,7 +937,7 @@ def dns_lookup():
 
 
 def robots_admin_scanner():
-    show_banner("Robots & Admin Scanner")
+    sub_banner("Robots & Admin Scanner")
     print(f"{LY}[!] Enter website (with http or https)")
     url = input(f"{W} → ").strip()
 
@@ -970,7 +970,7 @@ def robots_admin_scanner():
 
     input(f"{LG}\nPress Enter to return...")
 def username_osint():
-    show_banner("USERNAME OSINT")
+    sub_banner("USERNAME OSINT")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
         print(f"{Ye}[!] Going back...{Wh}")
@@ -1335,7 +1335,7 @@ def cam_hacker():
 def main():
     while True:
         clear()
-        show_banner("Main Menu")
+        banner("Main Menu")
 
         print(f"{Wh}Available Tools:{Gr}")
         print("  [1]  IP Tracker")
