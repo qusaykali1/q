@@ -135,7 +135,7 @@ def banner():
 {Gr} {Ye}Instagram : @qusay_kali | {Cy}palestin {Ye}| {Ye}youtube : @Qusay_kali
 {Wh}------------------------------------------------------------""")
 
-def sub_banner(title=""):
+def show_banner(title=""):
     clear()
     print(f"""
 {Re}                 .                         .
@@ -472,7 +472,7 @@ async def sherlock_check(session, site_name, site_url, username, semaphore):
             return None
 def EchoIntel():
     while True:
-        show_banner("EchoIntel - Information Gathering")
+        sub_banner(" Information Gathering")
 
         print(f"{LG}EchoIntel Tools:")
         print(f"{B}  1 {W}- Information Gathering")
@@ -485,7 +485,7 @@ def EchoIntel():
 
         elif ch == "1":
             while True:
-                show_banner("Information Gathering")
+                sub_banner("Information Gathering")
 
                 print(f"{LG}\nAvailable tools:")
                 print(f"{B}  1 {W}- Bypass CloudFlare ")
@@ -515,7 +515,7 @@ def EchoIntel():
 
 
 
-def show_banner(title=""):
+def sub_banner(title=""):
     clear()
     
     print(f"""{C}
@@ -970,7 +970,7 @@ def robots_admin_scanner():
 
     input(f"{LG}\nPress Enter to return...")
 def username_osint():
-    banner("USERNAME ")
+    show_banner("USERNAME ")
     user = input(f"{Wh}[+] Username (press Enter to go back): {Gr}").strip()
     if not user:
         print(f"{Ye}[!] Going back...{Wh}")
@@ -1070,7 +1070,7 @@ def username_osint():
 
 
 def phone_osint():
-    sub_banner("Phone Number OSINT")
+    show_banner("Phone Number OSINT")
     num = input(f"{Wh}[+] +962xxx (press Enter to go back): {Gr}").strip()
 
     if not num:
@@ -1151,7 +1151,7 @@ def phone_osint():
     input(f"{Wh}\nPress Enter to continue...")
 
 def device_info():
-    sub_banner("Device Information")
+    show_banner("Device Information")
     host = socket.gethostname()
     address_full = "N/A"
 
@@ -1234,7 +1234,7 @@ def fetch_from_source(name, base_url, regex_pat, filename):
 
 def additional_cams_menu():
     while True:
-        sub_banner("Public Webcams")
+        show_banner("Public Webcams")
         print(f"{Wh}[1]{Gr} EarthCam")
         print(f"{Wh}[2]{Gr} SkylineWebcams")
         print(f"{Wh}[3]{Gr} Opentopia")
@@ -1259,7 +1259,7 @@ def additional_cams_menu():
             print(f"{Re}[!] Invalid choice")
 
 def cam_hacker():
-    sub_banner("Cam Hacker")
+    show_banner("Cam Hacker")
     try:
         import colorama
         colorama.init()
@@ -1344,12 +1344,12 @@ def main():
         print("  [4]  Username OSINT")
         print("  [5]  Cam-hacker")
         print("  [6]  EchoIntel")
-        print(f"  [0]  Exit{Wh}\n")
+        print(f" [0]  Exit{Wh}\n")
 
         ch = input(f"{Wh}Select an option → {Gr}").strip()
 
         if ch == "0":
-            print(f"\n{Gr}Thank you! Free Palestine 🇵🇸{Wh}")
+            print(f"\n{Gr}Thank you 🇵🇸{Wh}")
             sys.exit(0)
 
         elif ch == "1":
