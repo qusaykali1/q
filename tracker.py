@@ -121,7 +121,7 @@ async def sherlock_search(username):
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-def banner():
+def show_banner():
     clear()
     print(f"""{Cy}
                                                                                       
