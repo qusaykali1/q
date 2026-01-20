@@ -19,17 +19,17 @@
 ### 📱 1. Termux (Android) | تريمكس
 ```bash
 1.pkg update && pkg upgrade -y
-``
-2.pkg install python git clang -y
-``
-3.git clone https://github.com/qusaykali1/ip-tracker.git
-``
-4.cd ip-tracker
-``
-5.pip install -r requirements.txt
-``
-6.python tracker.py
 ```
+2.pkg install python git clang -y
+```
+3.git clone https://github.com/qusaykali1/ip-tracker.git
+```
+4.cd ip-tracker
+```
+5.pip install -r requirements.txt
+```
+6.python tracker.py
+``
 🐉 2. Kali Linux / Ubuntu | كالي لينكس
 ```
 sudo apt update && sudo apt install python3 python3-pip git -y
