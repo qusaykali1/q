@@ -24,7 +24,6 @@ pkg update && pkg upgrade -y
 2s تثبيت المتطلبات
 ```
 pkg install python git clang -y
-
 ```
 3s تحميل الأداة من GitHub
 ```
