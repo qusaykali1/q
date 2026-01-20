@@ -47,20 +47,20 @@ python tracker.py
 
 1s تحديث النظام وتثبيت المتطلبات
 ```
-$ sudo apt update && sudo apt install python3 python3-pip git -y
+sudo apt update && sudo apt install python3 python3-pip git -y
 ```
 2s تحميل الأداة من GitHub
 ```
-$ git clone https://github.com/qusaykali1/ip-tracker.git
+git clone https://github.com/qusaykali1/ip-tracker.git
 ```
 3s الدخول إلى مجلد الأداة
 ```
-$ cd ip-tracker
+cd ip-tracker
 ```
 4s تثبيت مكتبات بايثون
 ```
-$ pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 4s تشغيل الأداة
 ```
-$ python3 tracker.py
+python3 tracker.py
