@@ -18,10 +18,14 @@
 ## 🛠️ التحميل والتشغيل
 📱 Termux (Android)
 1️⃣ تحديث الحزم
+```
 pkg update && pkg upgrade -y
-
+```
 2️⃣ تثبيت المتطلبات
+```
 pkg install python git clang -y
+
+```
 
 3️⃣ تحميل الأداة من GitHub
 git clone https://github.com/qusaykali1/ip-tracker.git
