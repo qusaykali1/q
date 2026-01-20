@@ -26,17 +26,20 @@ pkg update && pkg upgrade -y
 pkg install python git clang -y
 
 ```
-
 3️⃣ تحميل الأداة من GitHub
+```
 git clone https://github.com/qusaykali1/ip-tracker.git
 
 4️⃣ الدخول إلى مجلد الأداة
+```
 cd ip-tracker
 
 5️⃣ تثبيت مكتبات بايثون
+```
 pip install -r requirements.txt
 
 6️⃣ تشغيل الأداة
+````
 python tracker.py
 
 
