@@ -45,9 +45,22 @@ python tracker.py
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 🐉 2. Kali Linux / Ubuntu | كالي لينكس
+1s تحديث النظام وتثبيت المتطلبات
 ```
-sudo apt update && sudo apt install python3 python3-pip git -y
-git clone https://github.com/qusaykali1/ip-tracker.git
-cd ip-tracker
-pip3 install -r requirements.txt
-python3 tracker.py
+$ sudo apt update && sudo apt install python3 python3-pip git -y
+```
+2s تحميل الأداة من GitHub
+```
+$ git clone https://github.com/qusaykali1/ip-tracker.git
+```
+3s الدخول إلى مجلد الأداة
+```
+$ cd ip-tracker
+```
+4s تثبيت مكتبات بايثون
+```
+$ pip3 install -r requirements.txt
+```
+4s تشغيل الأداة
+```
+$ python3 tracker.py
