@@ -14,6 +14,12 @@
 5.**فتح كاميرات مراقبة** 
 ---
 
+
+
+<p align="center">
+  <img src="https://github.com/qusaykali1/ip-tracker/blob/main/qusaykali/img/sss.png" alt=" Guide">
+</p>
+
 🛠️ Installation & Execution | التحميل والتشغيل
 ## 🛠️ التحميل والتشغيل
 📱 Termux (Android)
